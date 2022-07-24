@@ -3,7 +3,6 @@ import {View , Text ,Pressable ,StyleSheet ,Dimensions,TouchableOpacity ,ScrollV
 import {Icon} from '@rneui/themed'
 import {colors} from '../global/styles'
 
-import { StackActions } from '@react-navigation/native';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT= Dimensions.get('window').height;
 
@@ -25,7 +24,7 @@ export default function RestaurantHomeScreenContent({navigation , name , Address
                     name = 'arrow-left'
                     color = '#eee'
                     size ={32}
-                    onPress ={()=>{navigation.dispatch(StackActions.popToTop());}}
+                    onPress ={()=>{navigation.goBack();}}
                 />
       </View>
        <View style={{top :5 , position:'absolute' , right:5}}> 
@@ -72,7 +71,7 @@ export default function RestaurantHomeScreenContent({navigation , name , Address
               return(
                 <Pressable onPress = {()=>{console.log(item,'=>',index)}}>
                   <View key={item.id}>
-                  <View style={styles.productData ,{ marginLeft:18,marginBottom: Menu.length-1==index ? 220 : 10 , borderRadius:12,paddingTop:5, paddingBottom:5,elevation: 5,padding:2,backgroundColor:'#fff'}}>
+                  <View style={styles.productData ,{ marginLeft:18,marginBottom: Menu.length-1==index ? 220 : 10}}>
                   <View>
                     <Image style= {styles.Image}  source={{uri:item.image}} />
                   </View>
@@ -111,7 +110,13 @@ styles = StyleSheet.create({
 },
 productData:{ 
   width:(SCREEN_WIDTH/2)-30 , 
-  height:250 , 
+  height:250 ,
+  borderRadius:12,
+  paddingTop:5, 
+  paddingBottom:5,
+  elevation: 5,
+  padding:2,
+  backgroundColor:'#fff'
  
 }, 
 })

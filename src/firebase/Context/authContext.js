@@ -32,7 +32,7 @@ return(
     }
 
         },
-        register: async (email,password ,name , contact ,CNIC, image ) => {
+        register: async (email,password ,name , contact ,CNIC, image, city ) => {
           try {
             const user = await auth().createUserWithEmailAndPassword(email, password )
             .then(() => {
@@ -49,6 +49,7 @@ return(
                   createdAt: firestore.Timestamp.fromDate(new Date()),
                   userImg: image,
                   restaurant: false , 
+                  city:city
               }
               )  
               //ensure we catch any errors at this stage to advise us if something does go wrong

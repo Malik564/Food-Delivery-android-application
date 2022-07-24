@@ -44,7 +44,6 @@ export const  updateRestaurant=async(restaurantName,Address,Rimage,Menu)=>{
               .update({
                 restaurantOwner:auth().currentUser.uid,
                   restaurantName:restaurantName,
-                //   farAway:"21.2",
                   businessAddress:Address,
                   images:Rimage,
                   averageReview:5.0,

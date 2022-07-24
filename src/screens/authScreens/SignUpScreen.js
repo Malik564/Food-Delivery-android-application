@@ -10,6 +10,10 @@ import {SignInContext} from '../../firebase/Context/authContext';
 import { launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage'
 import uuid from 'react-native-uuid'; 
+import {data} from '../../global/Data';
+
+import SelectDropdown from 'react-native-select-dropdown'
+
 
 const SignUpScreen = ({navigation}) => {
 
@@ -26,8 +30,15 @@ const [password, setPassword] = useState();
 const [confirmpassword, setConfirmpassword] = useState();
 const [image , setImage] = useState();
 const [progress , setProgress] = useState(0)
+const [City , setCity] = useState('select City');
+
 const {register} = useContext(SignInContext);
 
+
+
+let Cities =data;
+
+Cities = Cities.filter((item) => item.country == 'PK').map((item) => (item.name));
 
 
 const pickImgAndUpload=()=>{
@@ -83,7 +94,15 @@ return (
         value={progress}
         variant="determinate"
       />     
-           
+            <View style ={styles.view6}>
+                <TextInput 
+                  placeholder = "Name"
+                  style = {styles.input1}
+                  autoFocus = {false}
+                  onChangeText = {(name) => setUsername(name)}
+                  value={username}
+                />
+              </View>
               <View style ={styles.view6}>
                <TextInput 
                  placeholder = "Mobile Number"
@@ -104,15 +123,7 @@ return (
                  value ={CNIC}
                />
               </View>
-              <View style ={styles.view6}>
-                <TextInput 
-                  placeholder = "Name"
-                  style = {styles.input1}
-                  autoFocus = {false}
-                  onChangeText = {(name) => setUsername(name)}
-                  value={username}
-                />
-              </View>
+             
               <View style ={styles.view10}>
                  <View>
                      <Icon 
@@ -168,10 +179,36 @@ return (
                   <Icon name ="visibility-off" color ={colors.grey3}  type = "material" style ={{marginRight:10}}/>
                </Animatable.View>      
               </View>
+
+
                {
                  password !== confirmpassword  && confirmpassword !=='' &&
                   <View><Text style={{color:'red' , margin:5}}>* Password not matched</Text></View>
                }
+
+               <View>
+                        <Text style={{marginLeft:10 , marginTop:10}}>City :</Text>
+                               <SelectDropdown
+	                                data={Cities}
+                                  buttonStyle={styles.TextInput1}
+                                  defaultButtonText={City}
+	                                onSelect={(selectedItem, index) => {
+	                                	setCity(selectedItem)
+	                                }}
+	                                buttonTextAfterSelection={(selectedItem, index) => {
+	                                	// text represented after item is selected
+	                                	// if data array is an array of objects then return selectedItem.property to render after item is selected
+	                                	return selectedItem
+	                                }}
+	                                rowTextForSelection={(item, index) => {
+	                                	// text represented for each item in dropdown
+	                                	// if data array is an array of objects then return item.property to represent item in dropdown
+	                                	return item
+	                                }}
+                                />
+                        </View>
+
+
                <View style ={styles.view15}>
                   <Text style ={styles.text3}>By creating or logging into an account you are</Text>
                   <View style ={styles.view16}>
@@ -186,7 +223,7 @@ return (
                     title = "Create my account"
                     buttonStyle = {styles.button1}
                     titleStyle ={styles.title1}
-                    onPress = {()=>register(email,password , username , contact , CNIC , image)}
+                    onPress = {()=>{register(email,password , username , contact , CNIC , image , City)}}
                    />
                </View>
                        </View>
@@ -202,7 +239,7 @@ return (
                    title = "Sign-In"
                    buttonStyle ={styles.button2}
                    titleStyle = {styles.title2}
-                   onPress ={()=>{navigation.navigate('SignInScreen')}}
+                   onPress ={()=>{ navigation.navigate('SignInScreen')}}
                  />
                  </View>
                </View>
@@ -425,6 +462,14 @@ userImage:{
     borderRadius:50 , 
     margin :10,
     marginLeft:15
-},
+},TextInput1:{
+        borderWidth:1,
+        borderColor:"#86939e",
+        marginHorizontal:20,
+        borderRadius:12,
+        marginBottom:10,
+        paddingLeft:15,
+        marginTop:10
+      },
 
 })

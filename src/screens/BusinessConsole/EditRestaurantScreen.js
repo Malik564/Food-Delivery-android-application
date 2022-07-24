@@ -8,6 +8,7 @@ import uuid from 'react-native-uuid';
 import { launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 
+import SelectDropdown from 'react-native-select-dropdown'
 import {
   View,
   SafeAreaView,
@@ -33,7 +34,8 @@ export default function EditRestaurantScreen({navigation  , route}){
     const [Rimage , setRImage] = useState(RestaurantImage);
     const [progress , setProgress] = useState();
     const [itemProgress , setItemProgress] =useState([]);
-
+ const categories = ["🍔 Fast Food", "🍜 Chinese","🥘 Arabian", "🥩 Grill", "🥧 Desert" , "🥗 Salads", "🐟 Sea Food", "🍾 Bar" ]
+       
 
     const [menu,setMenu] = useState(Menu);
     
@@ -186,12 +188,26 @@ const pickImgAndUpload=(id)=>{
                              />
                         </View>
                         <View>
-                             <TextInput 
-                              style ={styles.TextInput1}
-                              placeholder ="category"
-                              value={element.category}
-                              onChangeText={(A) =>{ menu[index].category=A; setMenu([...menu]);}}
-                             />
+                             <Text style={{marginLeft:20}}>categories :</Text>
+                               <SelectDropdown
+	                                data={categories}
+                                    defaultValue={element.category}
+                                    defaultButtonText={element.category}
+                                  buttonStyle={styles.TextInput1}
+	                                onSelect={(selectedItem, index) => {
+	                                	element.category=selectedItem
+	                                }}
+	                                buttonTextAfterSelection={(selectedItem, index) => {
+	                                	// text represented after item is selected
+	                                	// if data array is an array of objects then return selectedItem.property to render after item is selected
+	                                	return selectedItem
+	                                }}
+	                                rowTextForSelection={(item, index) => {
+	                                	// text represented for each item in dropdown
+	                                	// if data array is an array of objects then return item.property to represent item in dropdown
+	                                	return item
+	                                }}
+                                />
                         </View>
                     </View>
                 )

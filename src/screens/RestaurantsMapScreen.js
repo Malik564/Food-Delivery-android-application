@@ -22,8 +22,8 @@ const getLocation=()=>{
 		.catch(error => console.warn(error));
 }
 
-const [lng, setLng]=useState();
-const [lat , setLat] = useState();
+const [lng, setLng]=useState(74.87303);
+const [lat , setLat] = useState(32.10197);
 
 
 useEffect(() => {
@@ -59,12 +59,12 @@ useEffect(() => {
       style={styles.map}
       zoomEnabled={true}
       region={{
-        latitude: 22.258,
-        longitude: 71.19,
+        latitude: 32.10197,
+        longitude: 74.87303,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }}
-    >
+    >   
       <Marker
         coordinate={{ latitude: lat, longitude: lng }}
         title={"title"}

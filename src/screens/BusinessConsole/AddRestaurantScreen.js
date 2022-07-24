@@ -7,6 +7,8 @@ import {colors , parameters } from  '../../global/styles';
 import uuid from 'react-native-uuid';
 import { launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
+import SelectDropdown from 'react-native-select-dropdown'
+
 
 import {
   View,
@@ -30,7 +32,8 @@ export default function AddRestaurantScreen({navigation}){
     const [Rimage , setRImage] = useState();
     const [progress , setProgress] = useState();
     const [itemProgress , setItemProgress] =useState([]);
-
+    const categories = ["🍔 Fast Food", "🍜 Chinese","🥘 Arabian", "🥩 Grill", "🥧 Desert" , "🥗 Salads", "🐟 Sea Food", "🍾 Bar" ]
+                           
 
     const [menu,setMenu] = useState([]);
 
@@ -148,7 +151,7 @@ const pickImgAndUpload=(id)=>{
                 value={itemProgress[index]}
                 variant="determinate"
                 />    
-                
+                 
                 </Pressable>
               </View>
                         <View style ={{ padding:20 , position:'absolute', right:0}}>
@@ -180,11 +183,24 @@ const pickImgAndUpload=(id)=>{
                              />
                         </View>
                         <View>
-                             <TextInput 
-                              style ={styles.TextInput1}
-                              placeholder ="category"
-                              onChangeText={(A) =>{ element.category=A}}
-                             />
+                        <Text style={{marginLeft:20}}>categories :</Text>
+                               <SelectDropdown
+	                                data={categories}
+                                     buttonStyle={styles.TextInput1}
+	                                onSelect={(selectedItem, index) => {
+	                                	element.category=selectedItem
+	                                }}
+	                                buttonTextAfterSelection={(selectedItem, index) => {
+	                                	// text represented after item is selected
+	                                	// if data array is an array of objects then return selectedItem.property to render after item is selected
+	                                	return selectedItem
+	                                }}
+	                                rowTextForSelection={(item, index) => {
+	                                	// text represented for each item in dropdown
+	                                	// if data array is an array of objects then return item.property to represent item in dropdown
+	                                	return item
+	                                }}
+                                />
                         </View>
                     </View>
                 )
@@ -293,11 +309,19 @@ const styles =StyleSheet.create({
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
-  },card:{backgroundColor: 'white',
+  },
+  card:{backgroundColor: 'white',
     borderRadius: 8,
     paddingHorizontal: 25,
     width: '90%',
     marginVertical: 10,
-    marginHorizontal:20}
+    marginHorizontal:20},
+
+     pickerStyle:{  
+        height: 150,  
+        width: "80%",  
+        color: '#344953',  
+        justifyContent: 'center',  
+    }  
   
 })

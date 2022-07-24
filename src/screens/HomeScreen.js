@@ -1,12 +1,14 @@
-import React ,{ useState ,useEffect} from 'react';
+import React ,{ useState ,useEffect,useRef} from 'react';
 import {View , Text , StyleSheet , TouchableOpacity , ScrollView ,RefreshControl, FlatList , Pressable , Image , Dimensions , ActivityIndicator} from 'react-native';
 import {Icon} from '@rneui/base';
 import HomeHeader from '../components/HomeHeader';
 import {colors , parameters } from  '../global/styles';
 import FoodCard from '../components/FoodCard';
 import firestore from '@react-native-firebase/firestore'
+import SelectDropdown from 'react-native-select-dropdown'
 
-
+import  {city}  from '../firebase/UserData';
+import {data} from '../global/Data';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -19,11 +21,19 @@ const wait = (timeout) => {
 
 export default function HomeScreen({navigation}){
 
-    const [indexCheck , setIndexCheck] = useState('0');
     const load=true;
     const [loading , setLoading] =useState(load);
     const [Data, setData] = useState([])
     const [refreshing, setRefreshing] = useState(false);
+    const [City , setCity] = useState([city]);
+    const dropdownRef = useRef({});
+
+    let Cities =data;
+
+    Cities = Cities.filter((item) => item.country == 'PK').map((item) => (item.name));
+    
+    let filteredData = Data.filter(item=>item.businessAddress==City);
+
 
 const FirebaseData = ()=>{
     Data.length=0;   // to clear old array of data
@@ -35,14 +45,20 @@ const FirebaseData = ()=>{
             });   
         setLoading(false)
     });
-    }
+    }   
 
     getResTaurantData();
 }
 
 
+
+
+
+
 const onRefresh = React.useCallback(() => {
+   
     setRefreshing(true);
+    setLoading(true);
     FirebaseData();
     wait(2000).then(() => setRefreshing(false));
   }, []);
@@ -51,9 +67,15 @@ const onRefresh = React.useCallback(() => {
 
 useEffect(() => {
     FirebaseData();
-}, [navigation]);
+
+}, []);
 
 
+const handle=(item)=>{
+    City.length=0;
+    City[0]=item;
+    setCity([...City]);
+}
 
 
     if(loading)
@@ -83,51 +105,70 @@ useEffect(() => {
         >
             <View style = {styles.filterView}>
                         <View style = {styles.addressView}>
+                        
                             <View style = {{  flexDirection:'row'  , alignItems:'center', paddingLeft:10}}>
+                            
                                 <Icon 
                                     type = 'material-community'
                                     name = 'map-marker'
                                     color = {colors.grey1}
                                     size = {26}
                                 />
-                                <Text style = {{marginLeft : 5}}> 22 Bessie Street </Text>
+                                <Text style = {{marginLeft : 5}}>{City[0]} </Text>
+                            
                             </View>
+                            <Pressable  onPress={()=>{dropdownRef.current.openDropdown()}}>
                             <View style = {styles.clockView}>
                                 <Icon 
-                                    type = 'material-community'
-                                    name = 'clock-time-four'
-                                    color = {colors.grey1}
-                                    size = {26}
-                                />
-                                <Text style = {{marginLeft : 5}}> Now </Text>
-                            </View>
-                        </View>
-                        <View>
-                             <Icon 
                                     type = 'material-community'
                                     name = 'tune'
                                     color = {colors.grey1}
                                     size = {26}
                                 />
+
+                                <Text style = {{marginLeft : 5}}> FIlter  </Text>
+                            </View></Pressable>
+                        </View>
+                        <View>
+                             
+                                <SelectDropdown
+	                              data={Cities}
+                                  buttonStyle={{height:0 , width:'100%'}}
+                                  defaultButtonText={City[0]}
+                                  ref={dropdownRef} 
+	                              onSelect={(selectedItem )=> {
+                                        const Item = selectedItem;
+	                                	handle(Item);
+	                                }}
+	                                buttonTextAfterSelection={(selectedItem, index) => {
+	                                	// text represented after item is selected
+	                                	// if data array is an array of objects then return selectedItem.property to render after item is selected
+	                                	return selectedItem
+	                                }}
+	                                rowTextForSelection={(item, index) => {
+	                                	// text represented for each item in dropdown
+	                                	// if data array is an array of objects then return item.property to represent item in dropdown
+	                                	return item
+	                                }}
+                                />
                         </View>
             </View>
 
            
+ 
 
-
-            <View style={styles.headerTextView}>
+         {  filteredData.length>0 && <View style={styles.headerTextView}>
                 <Text style ={{...styles.headerText}}>
-                        Top Restaurants
+                        Restaurants In Your Area
                 </Text>
             </View>
-                
+                }
 
             <View>
-                   
                 <FlatList
                     style = {{margin:10 , marginBottom:10}}
                     horizontal={true}
-                    data = {Data}
+                    data = {filteredData}
                     keyExtractor = {(item , index) => index.toString()}
                     showHorizontalScrollIndicator = {false}
                     renderItem = {({item , index}) =>(
@@ -148,7 +189,7 @@ useEffect(() => {
 
             <View style={styles.headerTextView}>
                 <Text style ={{...styles.headerText}}>
-                   Restaurants In Your Area
+                   Suggestions
                 </Text>
             </View>
                         

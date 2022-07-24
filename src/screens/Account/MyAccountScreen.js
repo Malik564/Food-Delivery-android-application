@@ -2,7 +2,7 @@ import React , { useState , useEffect , useContext} from 'react';
 import {View ,Text , StyleSheet,ScrollView , Image } from 'react-native';
 import {colors} from '../../global/styles'
 import {Icon} from '@rneui/base';
-import  { UserEmail ,name , contact , image}  from '../../firebase/UserData';
+import  { UserEmail ,name , contact , image , city}  from '../../firebase/UserData';
 export default function MyAccountScreen(){
 
     
@@ -30,6 +30,10 @@ const [Contact , setContact] =useState(contact);
             <View>
                 <Text style ={styles.headingText}>Contact</Text>
                 <Text style={styles.contact}>{Contact}</Text>
+            </View>
+             <View>
+                <Text style ={styles.headingText}>City</Text>
+                <Text style={styles.contact}>{city}</Text>
             </View>
             </View>
              

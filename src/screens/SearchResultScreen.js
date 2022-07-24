@@ -4,28 +4,30 @@ import SearchResultCard from '../components/SearchResultCard';
 import {colors} from "../global/styles";
 import firestore from '@react-native-firebase/firestore';
 
+import  {  city}  from '../../firebase/UserData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export default function SearchResultScreen({navigation,route}) {
 
     const {item} = route.params;
-    console.log(item)
+    const [city , setCity] = useState(item);
     const [data , setData] = useState([]);
     const load=true;
     const [loading , setLoading] =useState(load);
-
+    
 
 const FirebaseData = ()=>{
     data.length=0;   // to clear old array of data
     const getResTaurantData=async() => {
-     await firestore().collection('restaurant').get()
+     await firestore().collection('restaurant').where('businessAddress', '=='  , city).get()
     .then(function(documentSnapshot){
       documentSnapshot.forEach((doc) => {
                 data.push(doc.data());
             });   
             setLoading(false)
     setData([...data])
+
     });
     }
     getResTaurantData();
@@ -34,6 +36,7 @@ const FirebaseData = ()=>{
 
 useEffect(() => {
     FirebaseData();
+   
 }, [navigation]);
 
 
@@ -50,8 +53,6 @@ useEffect(() => {
 
     return (
         <View style ={styles.container}>
-
-
             <View>
                 <FlatList 
                      style ={{backgroundColor:colors.cardbackground}}

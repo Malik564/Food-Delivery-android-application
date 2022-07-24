@@ -9,7 +9,7 @@ let createdAt ;
 let location ; 
 let restaurant;
 let image ; 
-
+let city;
 
 
 export const user =  firestore().collection("users")
@@ -22,8 +22,9 @@ export const user =  firestore().collection("users")
                 location = documentSnapshot.createdAt;
                 restaurant=documentSnapshot.restaurant;
                 image = documentSnapshot.userImg;
+                city = documentSnapshot.city;
+                
             })
 
-
-export { name , contact , location , createdAt , restaurant , image} 
+export { name , contact , location , createdAt , restaurant , image , city} 
 export const UserEmail = auth().currentUser.email;
