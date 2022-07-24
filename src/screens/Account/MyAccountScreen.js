@@ -8,6 +8,7 @@ export default function MyAccountScreen(){
     
 const [username , setUsername] =useState(name);
 const [Contact , setContact] =useState(contact);
+
     return(
         <View style={{flex:1,backgroundColor:'rgba(218, 80, 4, 0.9)'}}>
             <View style ={{}}>

@@ -12,20 +12,22 @@ export const  placeOrder=async( CustomerId , restaurantId , order,totalPrice)=>{
     firestore().collection('users').doc(auth().currentUser.uid).collection('orders').doc(inv).set({
         invoice:inv,
         restaurantId:restaurantId,
-        orderStatus:'pending',
+        orderStatus:'Pending',
         order:order,
         totalPrice:totalPrice,
-        createdAt:new Date().toUTCString()
+        createdAt:new Date().toUTCString(),
+        payment:'Pending'
     })
 
     firestore().collection('restaurant').doc(restaurantId).collection('orders').doc(inv)
               .set({
                 invoice:inv,
                 CustomerId:CustomerId,
-                orderStatus:'pending',
+                orderStatus:'Pending',
                 order:order,
                 totalPrice:totalPrice,
-                createdAt:new Date().toUTCString()
+                createdAt:new Date().toUTCString(),
+                payment:'Pending'
               }
               ).then(()=>{});
   

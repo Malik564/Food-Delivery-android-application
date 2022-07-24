@@ -71,7 +71,18 @@ const onRefresh = React.useCallback(() => {
         }
     else{ 
         return (
+          
     <View style={styles.container}>
+    <ScrollView 
+          horizontal={true}
+          refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                />
+                }>
+
+    
     {Data.length==0 ? <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}><Text>No oders yet.</Text></View> : <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}></View>}
         <View >       
          <FlatList
@@ -79,12 +90,7 @@ const onRefresh = React.useCallback(() => {
             data = {Data}
              keyExtractor = {(item) => item.id}
             showVerticalScrollIndicator = {true}
-            refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
-                }
+            
              renderItem = {({ item , index}) => (
                 <View key={item.id}>
               
@@ -146,7 +152,7 @@ const onRefresh = React.useCallback(() => {
 
       
     
-        </View>
+        </View></ScrollView>
     </View>
 )
 }}

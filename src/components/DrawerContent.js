@@ -42,9 +42,13 @@ export default function DrawerContent(props){
 
                     <View style ={{flexDirection:'row', marginTop:0}}>
                          <View style = {{marginLeft:10,alignItems:"center", justifyContent:"center" }}  >
-                            <Text  style ={{fontWeight:'bold',color:colors.cardbackground,fontSize:18 }}>0</Text>
-                            <Text style ={{color:colors.cardbackground,fontSize:14}} >My Cart</Text>
-                            {restaurant && <Text>have restaurant</Text>}
+                             <Icon 
+                            type ="material"
+                            name = {restaurant ? "done-outline": "cancel"}
+                            
+                            size ={28}
+                                />
+                            {restaurant && <Text>Restaurant</Text>}
                         </View>    
                     </View>
 
@@ -55,19 +59,7 @@ export default function DrawerContent(props){
                 
                 <DrawerItemList {...props} />
 
-                <DrawerItem 
-                    label = "Payment"
-                    icon = {({color,size})=>(
-                        <Icon 
-                            type ="material-community"
-                            name = "credit-card-outline"
-                            color ={color}
-                            size ={size}
-                        />
-                    )}
-                />
-
-
+             
                 <DrawerItem 
                     label = "Promotions"
                     icon = {({color,size})=>(

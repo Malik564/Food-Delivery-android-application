@@ -22,15 +22,21 @@ const[passwordBlured,setPasswordBlured] = useState(false)
 
 const[CpasswordFocussed, setCPassordFocussed] = useState(false)
 const[CpasswordBlured,setCPasswordBlured] = useState(false)
-const[CNIC , setCNIC] = useState();
-const [contact, setContact] = useState();
-const [username , setUsername] =useState();
-const [email, setEmail] = useState();
-const [password, setPassword] = useState();
-const [confirmpassword, setConfirmpassword] = useState();
-const [image , setImage] = useState();
+
+const [msg , setMsg] = useState('');
+
+const[CNIC , setCNIC] = useState('');
+const [contact, setContact] = useState('');
+const [username , setUsername] =useState('');
+const [email, setEmail] = useState('');
+const [password, setPassword] = useState('');
+const [confirmpassword, setConfirmpassword] = useState('');
+const [image , setImage] = useState('');
 const [progress , setProgress] = useState(0)
-const [City , setCity] = useState('select City');
+const [City , setCity] = useState('Select City');
+const [Street , setStreet] = useState('');
+
+
 
 const {register} = useContext(SignInContext);
 
@@ -67,6 +73,8 @@ const pickImgAndUpload=()=>{
 
 
 
+
+
 return (
   <View style = {styles.container}>
     <Header title ="MY ACCOUNT"  type ="arrow-left" navigation ={navigation}/> 
@@ -98,7 +106,7 @@ return (
                 <TextInput 
                   placeholder = "Name"
                   style = {styles.input1}
-                  autoFocus = {false}
+                  autoFocus = {true}
                   onChangeText = {(name) => setUsername(name)}
                   value={username}
                 />
@@ -108,7 +116,7 @@ return (
                  placeholder = "Mobile Number"
                  style = {styles.input1}
                  keyboardType ="number-pad"
-                 autoFocus = {true}
+                 autoFocus = {false}
                  onChangeText = {(mobileNumber) => setContact(mobileNumber)}
                  value ={contact}
                />
@@ -118,7 +126,7 @@ return (
                  placeholder = "CNIC"
                  style = {styles.input1}
                  keyboardType ="number-pad"
-                 autoFocus = {true}
+               autoFocus = {false}
                  onChangeText = {(C) => setCNIC(C)}
                  value ={CNIC}
                />
@@ -208,7 +216,15 @@ return (
                                 />
                         </View>
 
-
+                <View style ={styles.view6}>
+               <TextInput 
+                 placeholder = "Street"
+                 style = {styles.input1}
+                 autoFocus = {false}
+                 onChangeText = {(C) => setStreet(C)}
+                 value ={Street}
+               />
+              </View>
                <View style ={styles.view15}>
                   <Text style ={styles.text3}>By creating or logging into an account you are</Text>
                   <View style ={styles.view16}>
@@ -219,11 +235,30 @@ return (
                   <Text style ={styles.text4}> Privacy Statement</Text>
                </View>
                <View style ={styles.view17}>
+
+               <View><Text style={{color:'red' , margin:5}}>{msg}</Text></View> 
                   <Button
                     title = "Create my account"
                     buttonStyle = {styles.button1}
                     titleStyle ={styles.title1}
-                    onPress = {()=>{register(email,password , username , contact , CNIC , image , City)}}
+                    onPress = {()=>{
+                      
+                      if(image=='' || !image )
+                      {
+                          setMsg('* Please select an image');
+
+                      }else if( name = ''  || contact=='' || CNIC =='' || email=='' || password=='' || confirmpassword =='' || City =='Select City' ||Street =='' ){
+                        
+                         setMsg('* Please insert all the entries ')
+                      } else if(password !== confirmpassword  && confirmpassword !=='') 
+                         {
+                         setMsg('* Password not matched') 
+                         }
+                      else{
+                             register(email,password , username , contact , CNIC , image , City, Street)
+                          }
+                      }                   
+                      }
                    />
                </View>
                        </View>

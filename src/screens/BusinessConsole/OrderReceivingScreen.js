@@ -20,6 +20,7 @@ export default function OrderReceivingScreen({navigation}) {
     const [OrderData, setOrderData] = useState([])
     const [CustomerData , setCustomerData]=useState([])
     const OrderStatus = ["Pending", "Cooking","On the Way", "Delivered", "Canceled" ]
+    const paymentStatus = ["Pending", "Done" ]
     
 const getOrdersData=async() => {
         await firestore().collection('restaurant').doc(auth().currentUser.uid)
@@ -37,18 +38,47 @@ const getOrdersData=async() => {
     });
 }
 
-const updateOrderstatus=async(inv,index)=>{ 
+const updateOrderstatus=async(inv,index,CustomerId)=>{ 
   const invoice = inv;
   try{          
   await firestore().collection('restaurant').doc(auth().currentUser.uid)
           .collection("orders").doc(invoice).update({
             orderStatus : OrderData[index].orderStatus,
           })
+
+      firestore().collection('users').doc(CustomerId)
+          .collection("orders").doc(invoice).update({
+            orderStatus:OrderData[index].orderStatus,
+          })
     }
   catch(exception){
     console.log(exception)
   }
 }
+
+
+
+const updatePaymentstatus=async(inv,index,CustomerId)=>{ 
+  const invoice = inv;
+  try{          
+    // at restaurant end
+  await firestore().collection('restaurant').doc(auth().currentUser.uid)
+          .collection("orders").doc(invoice).update({
+            payment : OrderData[index].payment,
+          })
+  //at customer end      
+    firestore().collection('users').doc(CustomerId)
+          .collection("orders").doc(invoice).update({
+            payment : OrderData[index].payment,
+          })
+
+
+    }
+  catch(exception){
+    console.log(exception)
+  }
+}
+
 
 
 
@@ -124,15 +154,15 @@ useEffect(() => {
                      <Text style ={{fontSize:12,color:'#555', fontWeight:"bold" , marginTop:5 , marginLeft:30}}>
                      Total                                                            Rs. {item.totalPrice}</Text>
                     </View>  
-                     <View style = {{flexDirection:'row-reverse' , bottom:0 , right:0 , marginRight:6 }}>
-                    <Text style ={{fontSize:12, fontWeight:"bold" , margin:5, marginTop:20,marginRight:30}}>
-                    {item.orderStatus}
+                    <Text style ={{fontSize:12, fontWeight:"bold" , margin:5, marginTop:20,marginLeft:20 }}>
+                    order Status :<Text style={ item.orderStatus =="Delivered" && {backgroundColor:  '#29F780' }}> {item.orderStatus}</Text> 
                     </Text>
-
-
+{item.payment=='Pending' &&
+                    
+                     <View style = {{flexDirection:'row-reverse' , bottom:0 , right:0 , marginRight:6 }}>
                      <Button title ="Update"
                     buttonStyle = {{marginVertical:10,marginHorizontal:5}}
-                    onPress={()=>{updateOrderstatus(item.invoice,index)}}
+                    onPress={()=>{updateOrderstatus(item.invoice,index , item.CustomerId)}}
                     />
                     <SelectDropdown 
 	                                data={OrderStatus}
@@ -154,7 +184,41 @@ useEffect(() => {
 	                                }}
                            />
                           
+                  </View> }
+
+{ item.orderStatus=='Delivered' &&
+                  <View style = {{flexDirection:'row' , bottom:0 , right:0  }}>
+                                  
+                
+                    <SelectDropdown 
+	                                data={paymentStatus}
+                                  buttonStyle={styles.TextInput1 }
+                                  defaultButtonText={item.payment}
+	                                onSelect={(selectedItem, index) => {
+	                                	item.payment=selectedItem;
+	                                }}
+	                                buttonTextAfterSelection={(selectedItem, index) => {
+	                                	// text represented after item is selected
+	                                	// if data array is an array of objects then return selectedItem.property to render after item is selected
+	                                	return selectedItem
+	                                }}
+	                                rowTextForSelection={(item, index) => {
+	                                	// text represented for each item in dropdown
+	                                	// if data array is an array of objects then return item.property to represent item in dropdown
+	                                	return item
+	                                }}
+                           />
+                    <Button title ="Update"
+                    buttonStyle = {{marginVertical:10,marginHorizontal:5}}
+                    onPress={()=>{updatePaymentstatus(item.invoice,index, item.CustomerId)}}
+                    />
+
+                          
                   </View> 
+}
+
+
+
                   </View>
                   </View>
                  </Pressable>
@@ -201,7 +265,7 @@ container:{
     height:40,
     borderWidth:1,
     borderColor:"#86939e",
-    marginHorizontal:20,
+    marginHorizontal:15,
     borderRadius:12,
     marginBottom:10,
     paddingLeft:15,
