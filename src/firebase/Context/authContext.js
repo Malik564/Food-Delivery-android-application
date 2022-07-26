@@ -1,10 +1,10 @@
 import React, {createContext,useReducer, useState} from 'react'
-import {Alert} from 'react-native'
+import {Alert  } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SignInReducer } from '../Reducer/authReducer'
 import auth from '@react-native-firebase/auth'
 import firestore from '@react-native-firebase/firestore';
-
-
+ 
 export const SignInContext = createContext()
 
  export const SignInContextProvider = (props)=>{
@@ -19,22 +19,29 @@ return(
     
      login: async (email, password) => {
           try {
-            const user = await auth().signInWithEmailAndPassword(email, password);
-      
-            if(user){
-               dispatchSignedIn({type:"UPDATE_SIGN_IN",payload:{userToken:"signed-in"}})
-           }
+            await auth().signInWithEmailAndPassword(email, password).then(()=>{
+                  let userToken;
+            try {
+              userToken='fefefefefe';
+                AsyncStorage.setItem('userToken',userToken );
+                   } catch (error) {
+                      console.log(error);
+                   }
+                dispatchSignedIn({type:"UPDATE_SIGN_IN", userToken:userToken})
+            });
+             
+                    
           }  catch(error){
         Alert.alert(
             error.name='Network Error',
-            error.message='Check internet connection'
+            error.message=error.message
         )
     }
 
         },
         register: async (email,password ,name , contact ,CNIC, image, city , street) => {
           try {
-            const user = await auth().createUserWithEmailAndPassword(email, password )
+             await auth().createUserWithEmailAndPassword(email, password )
             .then(() => {
               //Once the user creation has happened successfully, we can add the currentUser into firestore
               //with the appropriate details.
@@ -53,14 +60,27 @@ return(
                   street: street
               }
               )  
+
+
+              
               //ensure we catch any errors at this stage to advise us if something does go wrong
               .catch(error => {
                  Alert.alert(
              error.name='Network Error',
             error.message='Check internet connection')
               })
-              dispatchSignedIn({type:"UPDATE_SIGN_IN",payload:{userToken:"signed-in"}})  
+              
             })
+
+
+            let userToken;
+            try {
+              userToken='fefefefefe';
+               await AsyncStorage.setItem('userToken',userToken );
+                   } catch (error) {
+                      console.log(error);
+                   }
+                dispatchSignedIn({type:"UPDATE_SIGN_IN", userToken:userToken})
             //we need to catch the whole sign up process if it fails too.
             .catch(error => {
                 Alert.alert(
@@ -80,9 +100,15 @@ return(
         auth().signOut()
         .then(
             ()=>{console.log("USER SUCCESSFULLY SIGNED OUT")
-            dispatchSignedIn({type:"SIGN_OUT"})
+             
         }
         )
+        try{
+            await AsyncStorage.removeItem('userToken');
+        }catch(error){
+          console.log(error);
+        }
+        dispatchSignedIn({type:'SIGN_OUT',userToken:null }) ;
          
     }catch(error){
        Alert.alert(

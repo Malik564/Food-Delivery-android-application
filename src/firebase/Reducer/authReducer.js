@@ -1,20 +1,18 @@
 export const SignInReducer = (state,action) =>{
+     console.log('At reducer :' ,action.userToken);
     switch(action.type){
-        case 'RETRIVE_TOKEN':
-            return{
-            
-                userToken:action.userToken
-            }
+        
         case  'UPDATE_SIGN_IN':
             return{
-            
-                userToken:action.userToken
+            ...state,
+            userToken:action.userToken
             }
         case 'SIGN_OUT':
             return{
-            
-                userToken:null
+             ...state,
+            userToken:null
             }
+        
         default:
             return state
     }

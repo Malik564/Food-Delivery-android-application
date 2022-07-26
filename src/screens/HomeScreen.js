@@ -162,7 +162,7 @@ const handle=(item)=>{
                         Restaurants In Your Area
                 </Text>
             </View>
-                }
+           }
 
             <View>
                 <FlatList
