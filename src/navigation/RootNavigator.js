@@ -1,9 +1,8 @@
 import React,{useContext,useReducer,useEffect , useState} from 'react';
-import {View , ActivityIndicator} from 'react-native';
+import {View , ActivityIndicator , Image} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native'
 import { AuthStack } from './authStack';
-import { AppStack } from './appStack';
-import { SignInReducer } from '../firebase/Reducer/authReducer'
+import { AppStack } from './appStack'; 
 import { SignInContext } from '../firebase/Context/authContext';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -15,11 +14,8 @@ export default function RootNavigator(){
     const [loading , setLoading] =useState(load);
 
 
-const {signedIn} = useContext(SignInContext)
-const[SignedIn,dispatchSignedIn] = useReducer(SignInReducer,{
-    userToken:null,
-});
-
+const {signedIn , dispatchSignedIn} = useContext(SignInContext)
+ 
 
 useEffect(()=>{
  setTimeout(async() => {
@@ -31,7 +27,8 @@ useEffect(()=>{
            console.log(error);
         } 
      dispatchSignedIn({type:"UPDATE_SIGN_IN", userToken:userToken})
-  
+     
+      
      setLoading(false);
 
  }, 1000);
@@ -45,7 +42,8 @@ useEffect(()=>{
         {
             return(
             <View style={{flex:1,alignItems:'center' , justifyContent:'center'}}>
-             <ActivityIndicator size="large" size={80} color = '#DA5004'/>
+            <Image style= {{height:250 ,width : 250 , borderRadius:5,}}  source = {require('../assets/logo.png')}></Image>
+             <ActivityIndicator size="large" size={40} color = '#DA5004'/>
             </View>
             )
         }
@@ -53,7 +51,7 @@ useEffect(()=>{
 
             return(
             <NavigationContainer>
-                { SignedIn.userToken === null   ?  <AuthStack />: <AppStack />}
+                { signedIn.userToken === null   ?  <AuthStack />: <AppStack />}
             </NavigationContainer>
             )
         }

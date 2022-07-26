@@ -16,8 +16,8 @@ export default function SignInScreen({navigation}){
     const textInpput1 = useRef(1)
     const textInput2 = useRef(2)
 
-    const [email, setEmail] = useState('shan123@gmail.com');
-    const [password, setPassword] = useState('shan123');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const {login} = useContext(SignInContext);
 
 

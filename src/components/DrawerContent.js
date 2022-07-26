@@ -128,7 +128,7 @@ export default function DrawerContent(props){
             
                 <DrawerItem 
                     label = "Sign Out"
-                    onPress ={()=>{logout()}}
+                    onPress ={()=>{logout() }}
                     icon = {({color,size})=>(
                         <Icon 
                             type ="material-community"

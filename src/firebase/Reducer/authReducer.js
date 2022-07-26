@@ -4,13 +4,13 @@ export const SignInReducer = (state,action) =>{
         
         case  'UPDATE_SIGN_IN':
             return{
-            ...state,
-            userToken:action.userToken
+                ...state,
+                userToken:action.userToken
             }
         case 'SIGN_OUT':
             return{
              ...state,
-            userToken:null
+                userToken:null
             }
         
         default:

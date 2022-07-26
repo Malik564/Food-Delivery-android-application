@@ -41,7 +41,7 @@ return(
         },
         register: async (email,password ,name , contact ,CNIC, image, city , street) => {
           try {
-             await auth().createUserWithEmailAndPassword(email, password )
+            const user = await auth().createUserWithEmailAndPassword(email, password )
             .then(() => {
               //Once the user creation has happened successfully, we can add the currentUser into firestore
               //with the appropriate details.
