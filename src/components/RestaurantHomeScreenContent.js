@@ -10,7 +10,7 @@ const SCREEN_HEIGHT= Dimensions.get('window').height;
 
 
 
-export default function RestaurantHomeScreenContent({navigation , name , Address ,RestaurantImage,Menu}) {
+export default function RestaurantHomeScreenContent({navigation , name , Address ,RestaurantImage ,city , contact , coordinates ,Menu}) {
 
   
   return ( <ImageBackground
@@ -33,7 +33,7 @@ export default function RestaurantHomeScreenContent({navigation , name , Address
                     name = 'pencil'
                     color = '#eee'
                     size ={32}
-                    onPress ={()=>{navigation.navigate('EditRestaurantScreen' ,{name, Address,RestaurantImage , Menu})}}
+                    onPress ={()=>{navigation.navigate('EditRestaurantScreen' ,{name, Address,RestaurantImage ,city , contact , coordinates , Menu})}}
                 />
       </View>
 
@@ -41,7 +41,9 @@ export default function RestaurantHomeScreenContent({navigation , name , Address
         <Text style ={{fontSize:20 , marginTop:40,marginLeft:10 ,color:'#ddd'}}>Restaurant name</Text> 
         <Text style ={{fontSize:24, fontWeight:"bold" , marginTop:10,marginLeft:10 , color:'#eee' }}>{name}</Text> 
         <Text style ={{fontSize:20 , marginTop:10,marginLeft:10 ,color:'#ddd'}}>Address</Text> 
-        <Text style ={{fontSize:22, fontWeight:"bold" , marginTop:10,marginLeft:10 , color:'#eee' }}>{Address}</Text> 
+        <Text style ={{fontSize:22, fontWeight:"bold" , marginTop:10,marginLeft:10 , color:'#eee' }}>{Address} , {city}</Text> 
+        <Text style ={{fontSize:20 , marginTop:10,marginLeft:10 ,color:'#ddd'}}>Contact</Text> 
+        <Text style ={{fontSize:22, fontWeight:"bold" , marginTop:10,marginLeft:10 , color:'#eee' }}>{contact}</Text> 
       </View>
     
        <View style={styles.menuContainer}>

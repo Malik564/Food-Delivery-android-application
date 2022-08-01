@@ -6,8 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import MyOrderScreen from '../screens/MyOrderScreen';
 import MyAccountScreen from '../screens/Account/MyAccountScreen';
-import {ClientStack} from './clientStack' ;
-import {RestaurantsMapScreen} from '../screens/RestaurantsMapScreen'
+import {ClientStack} from './clientStack' ; 
 
 
 const ClientTabs= createBottomTabNavigator();

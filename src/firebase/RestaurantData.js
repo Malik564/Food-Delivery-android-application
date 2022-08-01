@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 
 
 
-export const  addRestaurant=async(restaurantName,Address,Rimage,Menu)=>{
+export const  addRestaurant=async(restaurantName, Address , city , contact, Rimage, Menu , coordinates)=>{
     firestore().collection('users').doc(auth().currentUser.uid).update({
       restaurant:true
     })
@@ -13,15 +13,14 @@ export const  addRestaurant=async(restaurantName,Address,Rimage,Menu)=>{
               .set({
                 restaurantOwner:auth().currentUser.uid,
                   restaurantName:restaurantName,
-                //   farAway:"21.2",
+                  city:city ,
                   businessAddress:Address,
+                  contact: contact,
                   images:Rimage,
                   averageReview:5.0,
                   numberOfReview:0,
-                  coordinates: {lat: -26.1888612, lng: 28.246325} ,
-                  discount:0,
-                  deliveryTime:30,
-                  collectTime:20,
+                  coordinates: coordinates ,
+               
                   productData:Menu,
               }
               ).then(()=>{console.log('added')});
@@ -38,20 +37,19 @@ export const  addRestaurant=async(restaurantName,Address,Rimage,Menu)=>{
 
 
 
-export const  updateRestaurant=async(restaurantName,Address,Rimage,Menu)=>{
+export const  updateRestaurant=async(restaurantName,Address , city , contact,Rimage,Menu , coordinates)=>{
   
     firestore().collection('restaurant').doc(auth().currentUser.uid)
               .update({
                 restaurantOwner:auth().currentUser.uid,
                   restaurantName:restaurantName,
                   businessAddress:Address,
+                  city:city ,
+                  contact: contact,
                   images:Rimage,
                   averageReview:5.0,
                   numberOfReview:0,
-                  coordinates: {lat: -26.1888612, lng: 28.246325} ,
-                  discount:0,
-                  deliveryTime:30,
-                  collectTime:20,
+                  coordinates: coordinates ,
                   productData:Menu,
               }
               ).then(()=>{console.log('updated')});

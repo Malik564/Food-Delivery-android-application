@@ -3,6 +3,8 @@ import {View , Text ,Pressable ,StyleSheet ,Dimensions ,ScrollView ,Image ,Image
 import {Icon, Badge} from '@rneui/themed'
 
 import { StackActions } from '@react-navigation/native';
+
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT= Dimensions.get('window').height;
 

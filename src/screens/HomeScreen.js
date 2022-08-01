@@ -107,12 +107,15 @@ const handle=(item)=>{
                         <View style = {styles.addressView}>
                         
                             <View style = {{  flexDirection:'row'  , alignItems:'center', paddingLeft:10}}>
-                            
+                                <Text style = {{marginLeft : 5}}>Location</Text>
                                 <Icon 
                                     type = 'material-community'
                                     name = 'map-marker'
                                     color = {colors.grey1}
                                     size = {26}
+                                    onPress={()=>{  City.length=0;
+                                                    City[0]=city;
+                                                    setCity([...City]);}}
                                 />
                                 <Text style = {{marginLeft : 5}}>{City[0]} </Text>
                             
@@ -126,7 +129,7 @@ const handle=(item)=>{
                                     size = {26}
                                 />
 
-                                <Text style = {{marginLeft : 5}}> FIlter  </Text>
+                                <Text style = {{marginLeft : 5}}> Filter  </Text>
                             </View></Pressable>
                         </View>
                         <View>
@@ -138,6 +141,7 @@ const handle=(item)=>{
                                   ref={dropdownRef} 
 	                              onSelect={(selectedItem )=> {
                                         const Item = selectedItem;
+                                       
 	                                	handle(Item);
 	                                }}
 	                                buttonTextAfterSelection={(selectedItem, index) => {
@@ -217,7 +221,7 @@ const handle=(item)=>{
 
             <View style = {styles.floatButton}>
                 <TouchableOpacity  onPress = {()=> {
-                    navigation.navigate('RestaurantsMapScreen')
+                    navigation.navigate('RestaurantsMapScreen' , {RestaurantsData:Data })
                 }}>
                 
                     <Icon

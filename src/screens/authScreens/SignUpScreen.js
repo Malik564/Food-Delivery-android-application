@@ -255,6 +255,7 @@ return (
                          setMsg('* Password not matched') 
                          }
                       else{
+                             setMsg('');
                              register(email,password , username , contact , CNIC , image , City, Street)
                           }
                       }                   

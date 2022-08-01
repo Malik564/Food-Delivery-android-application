@@ -26,8 +26,11 @@ export default function BusinessConsoleScreen({navigation}){
     const [restaurantAddress , setRestarantAddress] =useState();
     const [restaurantMenu , setRestarantMenu] =  useState();
     
+    const [City , setCity] = useState();
+    const [Contact , setContact ] = useState();
+    const [coordinates , setCoordinates] = useState();
 
-    const [refreshing, setRefreshing] = React.useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
 const FirebaseData =()=>{
     const getResTaurantData=async() => { await firestore().collection('restaurant').doc(auth().currentUser.uid).get()
@@ -37,6 +40,9 @@ const FirebaseData =()=>{
       setRestarantAddress(documentSnapshot.businessAddress);
       setRestarantMenu(documentSnapshot.productData);
       setRimage(documentSnapshot.images);
+      setCity(documentSnapshot.city);
+      setContact(documentSnapshot.contact);
+      setCoordinates(documentSnapshot.coordinates);
       setLoading(false)
     });
     }
@@ -118,7 +124,10 @@ useEffect(() => {
                  name={restaurantName} 
                  Address={restaurantAddress} 
                  RestaurantImage={Rimage} 
-                 Menu={restaurantMenu}  />
+                 Menu={restaurantMenu} 
+                 city={City} 
+                  contact={Contact} 
+                   coordinates={coordinates}  />
               
                  
                 </View>

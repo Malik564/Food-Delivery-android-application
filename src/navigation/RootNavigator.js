@@ -31,7 +31,7 @@ useEffect(()=>{
       
      setLoading(false);
 
- }, 1000);
+ }, 2000);
 
  
 },[])

@@ -18,6 +18,8 @@ export default function SignInScreen({navigation}){
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [msg , setMsg] = useState();
+
     const {login} = useContext(SignInContext);
 
 
@@ -82,14 +84,22 @@ export default function SignInScreen({navigation}){
                 </Animatable.View>
                 </View>
             </View>
-
+             <View><Text style={{color:'red' , margin:5}}>{msg}</Text></View> 
 
             <View style ={{marginHorizontal:20, marginTop:30}}>
                 <Button 
                     title ={loading? <ActivityIndicator /> : "SIGN IN"}
                     buttonStyle = {parameters.styledButton}
                     titleStyle = {parameters.buttonTitle}
-                    onPress={() => {setLoading(true);login(email, password); }}
+                    onPress={() => {
+                        if(email=='' || password==''){
+                            setMsg('* Please insert all the entries ')
+                        }
+                        else
+                        {
+                            setMsg('');
+                            setLoading(true);login(email, password);}
+                         }}
                    />
             </View>  
             </View>
