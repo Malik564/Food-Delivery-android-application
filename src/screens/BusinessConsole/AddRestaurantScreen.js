@@ -14,6 +14,8 @@ import firestore from '@react-native-firebase/firestore';
 import imagePath from '../../constants/imagePath'; 
 import {data} from '../../global/Data';
 
+import { StackActions } from '@react-navigation/native';
+
 import {
   View,
   SafeAreaView,
@@ -46,7 +48,7 @@ export default function AddRestaurantScreen({navigation}){
     const [Rimage , setRImage] = useState();
     const [progress , setProgress] = useState();
     const [itemProgress , setItemProgress] =useState([]);
-    const categories = ["🍔 Fast Food", "🍜 Chinese","🥘 Arabian", "🥩 Grill", "🥧 Desert" , "🥗 Salads", "🐟 Sea Food", "🍾 Bar" ]
+    const categories = ["🍔 Fast Food", "🍜 Chinese","🥘 Arabian", "🥩 Grill", "🥧 Desert" , "🥗 Salads", "🐟 Sea Food", "🍾 Bar" , "🍛 Continental"]
                            
 
 
@@ -414,12 +416,15 @@ useEffect(()=>{
                         } else 
                         if(!Address){
                             Alert.alert('* Required' , 'City cannot be null')
-                        } else if(!marker){
+                        } else if(marker==null){
+                            Alert.alert('* Required' , 'Must add restaurant location')
+                        } 
+                        else if(!marker){
                             Alert.alert('* Required' , 'Must add restaurant location')
                         } 
                         else {
                         addRestaurant(restaurantName , Address,City , Rcontact  , Rimage , menu , marker);
-                                    navigation.goBack();} }}
+                                    navigation.dispatch(StackActions.popToTop());} }}
              /></View>
         </View>
     )

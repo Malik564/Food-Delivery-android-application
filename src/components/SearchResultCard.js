@@ -11,16 +11,12 @@ import ProductCard from './ProductCard';
 const SearchResultCard = ({
     OnPressRestaurantCard,
     restaurantName,
-    deliveryAvailabe,
-    discountAvailable ,
-    discountPercent ,
     numberOfReview ,
     businessAddress ,
-    farAway ,
     averageReview ,
     images,
-    productData
-  
+    productData,
+    searchedCategory,
 
 }) => {
 
@@ -58,12 +54,9 @@ const SearchResultCard = ({
                                 size ={18}
                                 iconStyle ={{marginTop:3,marginLeft:-3}}
                             />
-
-                            <Text style ={styles.view5}>{farAway}Min</Text>
+                             <Text style ={styles.text6}>{businessAddress}</Text>
                         </View>
-                        <View style ={{flex:9}}>
-                            <Text style ={styles.text6}>{businessAddress}</Text>
-                        </View>
+                        
                         
                     </View>
                     
@@ -80,11 +73,13 @@ const SearchResultCard = ({
                 data = {productData}
                 keyExtractor ={(item,index)=>index.toString()}
                 renderItem ={({item,index})=> (
+                        item.category == searchedCategory &&
                             <ProductCard 
                             image = {item.image}
                             productName ={item.name}
                             price ={item.price}
-                              />
+                            productCategory = {item.category} 
+                              /> 
                 )}
                 horizontal ={true}
             />

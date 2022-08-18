@@ -15,8 +15,7 @@ export default function DrawerContent(props){
              <View style ={styles.container}>
                  <DrawerContentScrollView {...props}>
                  <View style ={{backgroundColor:colors.buttons,}}>
-                <View style = {{flexDirection:'row', alignItems:'center',
-                                    paddingLeft:20,paddingVertical:10}}>
+                <View style = {{flexDirection:'row', alignItems:'center',  paddingLeft:20,paddingVertical:10}}>
                     <Avatar 
                         rounded
                         avatarStyle ={styles.avatar}
@@ -33,22 +32,16 @@ export default function DrawerContent(props){
 
                 <View style ={{flexDirection:'row',justifyContent:"space-evenly",paddingBottom:5}}>
 
-                    <View style ={{flexDirection:'row', marginTop:0,}}>
-                        <View style = {{marginLeft:10,alignItems:"center", justifyContent:"center" }}  >
-                            <Text  style ={{fontWeight:'bold',color:colors.cardbackground,fontSize:18 }}>1</Text>
-                            <Text style ={{color:colors.cardbackground,fontSize:14}} >My Favorites</Text>
-                        </View>
-                    </View>
+                     
 
                     <View style ={{flexDirection:'row', marginTop:0}}>
                          <View style = {{marginLeft:10,alignItems:"center", justifyContent:"center" }}  >
                              <Icon 
                             type ="material"
                             name = {restaurant ? "done-outline": "cancel"}
-                            
                             size ={28}
                                 />
-                            {restaurant && <Text>Restaurant</Text>}
+                            <Text>Restaurant</Text>
                         </View>    
                     </View>
 

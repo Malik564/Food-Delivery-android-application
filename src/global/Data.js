@@ -1,27 +1,14 @@
-export const filterData = [{name:"Fast food",image: require('../assets/fastfood.png'), id:"0"},
-                    {name:"Burgers",image:require("../assets/burger.png"),id:"1"},
-                    {name:"Salads",image:require("../assets/salads.png"),id:"2"},
-                    {name:"Hotdog",image:require("../assets/hotdog.png"),id:"3"},
-                    {name:"Chinese",image:require("../assets/chinese.png"),id:"4"},
-                    {name:"Mexican",image:require("../assets/mexican.png"),id:"5"},
-                    {name:"Sea food",image:require("../assets/seafood.png"),id:"6"},
-                ];
-
-
-  
-
-
                 
-export const filterData2 = [{name:"Fast food",image:'https://fastly.4sqi.net/img/general/200x200/YOWNWAVZbdXMYacQ9ePdHYgpwcUNJoiWkmyjnAjgmbo.jpg' , id:"0"},
-{name:"Burgers",image: 'https://media-cdn.tripadvisor.com/media/photo-s/19/61/18/c1/m-a-club.jpg',id:"1"},
-{name:"Salads",image:"https://www.licious.in/blog/wp-content/uploads/2020/12/3-Step-Chicken-Salad.jpg",id:"2"},
-{name:"Hotdog",image: "https://www.seriouseats.com/thmb/3aeotigY4LkXTOQoG2gYJwcMwZg=/880x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/__opt__aboutcom__coeus__resources__content_migration__serious_eats__seriouseats.com__recipes__images__20110228-139951-yellow-mustard-73e2bf1a34c04de8b5d95fa16c4897a9.jpg",id:"3"},
-{name:"Chinese",image:"https://zameenblog.s3.amazonaws.com/blog/wp-content/uploads/2019/07/cover-image-41-1024x444.jpg",id:"4"},
-{name:"Mexican",image:"https://www.studyspanishlatinamerica.com/blog/wp-content/uploads/2021/06/guide-to-popular-mexican-food.jpg",id:"5"},  
-{name:"Sea food",image:"https://www.solitarytraveller.com/wp-content/uploads/2020/10/seafood_indian-768x576.jpg",id:"6"},
-{name:"Chinese Food",image:"https://images.squarespace-cdn.com/content/v1/5c844f05fb22a510b5fa6c1d/1612819813692-HQIFQ4G9L51Q9YPGLA1B/head.png?format=750w",id:"7"},
-{name:"Mexican pie",image:"https://www.telegraph.co.uk/content/dam/recipes/2021/09/23/2509-MexicanBeanPie_Menu_10387-xlarge_trans_NvBQzQNjv4BqItjHDapzz9O0ArzXNnbSDEumZljcFfBwJpsKggf9ih4.jpg?imwidth=640",id:"8"},  
-{name:"Ocean dish",image:"https://www.travelswitheden.blog/wp-content/uploads/2022/03/Portugal.jpg",id:"9"},
+export const filterData2 = [{name:"🍔 Fast Food",image:'https://media-cdn.tripadvisor.com/media/photo-s/19/61/18/c1/m-a-club.jpg' , id:"0"},
+{name:"🥘 Arabian",image: 'https://media.istockphoto.com/photos/traditional-tajine-dishes-couscous-and-fresh-salad-on-rustic-wooden-picture-id1067302478?b=1&k=20&m=1067302478&s=170x170&h=_uVs9S0KN4E7J69C6rXmAavB6pFQKAfnzo7uwhpMA4A=',id:"1"},
+{name:"🥩 Grill",image:"https://media.istockphoto.com/photos/beef-steaks-on-the-grill-picture-id1340209579?k=20&m=1340209579&s=612x612&w=0&h=yRmLeaWayHaM-1-7kkDHWonpN2sCRYew_SZgEQw8Sek=",id:"2"},
+{name:"🐟 Sea Food",image: "https://media.istockphoto.com/photos/preparing-to-eat-my-lunch-picture-id495021044?k=20&m=495021044&s=612x612&w=0&h=PVRso1fwRuMheCsrD_8jWHVRLtbRkr9A8S8JGn4u57s=",id:"3"},
+{name:"🍛 Continental",image:"https://media.istockphoto.com/photos/indian-dish-chicken-tikka-masala-picture-id1093661558?k=20&m=1093661558&s=612x612&w=0&h=bf_i0GFuoaQZ5XxdDZAVRvxkYF5TbfAQfHcPuAg8Z4I=",id:"4"},
+{name:"🍜 Chinese",image:"https://media.istockphoto.com/photos/asian-chicken-noodles-stir-fry-picture-id503155474?k=20&m=503155474&s=612x612&w=0&h=mFiAzmT1svVZnJSMWIU_3MY07j4A5FOLWVIvXfdiegM=",id:"5"},  
+{name:"🥧 Desert",image:"https://media.istockphoto.com/photos/assortment-of-products-with-high-sugar-level-picture-id845678144?k=20&m=845678144&s=612x612&w=0&h=0meDUO3ijvVeWQJSqaWD9ogtpOJYoWdH8wZTS3hTpAI=",id:"6"},
+{name:"🥗 Salad",image:"https://media.istockphoto.com/photos/greek-salad-with-vinaigrette-dressing-topped-with-grilled-chicken-picture-id1349067702?k=20&m=1349067702&s=612x612&w=0&h=wGl2h0KhoMwYN0FqOu-Ii1yy6QRhlSDFS6jnvH7BPx0=",id:"7"},
+{name:"🍾 Bar",image:"https://media.istockphoto.com/photos/pink-grapefruit-and-rosemary-gin-cocktail-is-served-in-a-prepared-gin-picture-id1323890695?k=20&m=1323890695&s=612x612&w=0&h=dOR54nlS9Pwh6WHKcrhdcKrnU0XT9CBHJw5wg58mIhU=",id:"8"},  
+{name:"Others",image:"https://media.istockphoto.com/photos/table-top-view-of-spicy-food-picture-id1316145932?k=20&m=1316145932&s=612x612&w=0&h=JTKwm-BPqu-bq9yv1M6564GKwm31a5iF3SULZM8meZ4=",id:"9"},
 ];
 
 

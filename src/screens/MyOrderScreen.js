@@ -3,7 +3,7 @@ import {View , Text ,Pressable ,StyleSheet ,Dimensions ,RefreshControl ,ScrollVi
 import {Icon, Badge} from '@rneui/themed'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-
+import RadioButtonRN from 'radio-buttons-react-native';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT= Dimensions.get('window').height;
@@ -18,9 +18,43 @@ export default function MyOrderScreen({navigation}) {
 
     const load=true;
     const [loading , setLoading] =useState(load);
-    const [Data, setData] = useState([])
+    const [Data, setData] = useState([]) 
     const [RestaurantData , setRestaurantData] =useState([]);
-const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState(false); 
+    const [filteredStatus , setFilteredStatus] = useState('All');
+
+    let filteredData ;
+
+   
+    if (filteredStatus == 'All'){
+       filteredData = Data ;
+    }else{
+      filteredData =  Data.filter(item => item.orderStatus == filteredStatus)
+    } 
+
+const radioData = [
+{
+  label: 'All'
+ },
+ {
+  label: 'Pending'
+ },
+ {
+  label: 'Cooking'
+ },
+ {
+  label: 'On the Way'
+ },
+ {
+  label: 'Delivered'
+ },
+ {
+  label: 'Canceled'
+ }, 
+
+];
+
+const [StatusState , setStatusState] = useState(radioData[0].label);
 
 
 
@@ -29,17 +63,18 @@ const getOrdersData=async() => {
             .collection('orders').orderBy('createdAt', 'desc').get()
             .then(function(documentSnapshot){
                 documentSnapshot.forEach((doc) => {
-                Data.push(doc.data());
+                Data.push(doc.data()); 
+                
                 firestore().collection('restaurant').doc(doc.data().restaurantId).get()
                 .then(function(documentSnapshot){
                       RestaurantData.push(documentSnapshot.data())
                       setRestaurantData([...RestaurantData])
                 })
-            });   
+            });    
         setLoading(false)
-    });
-}
+       });
 
+}
 
 
 useEffect(() => {
@@ -55,8 +90,10 @@ const onRefresh = React.useCallback(() => {
     setLoading(true);
     Data.length=0; 
     getOrdersData();
+     
     wait(2000).then(() => setRefreshing(false));
   }, []);
+
 
 
      
@@ -73,6 +110,22 @@ const onRefresh = React.useCallback(() => {
         return (
           
     <View style={styles.container}>
+    
+    <ScrollView 
+      horizontal={true}
+      >
+    <RadioButtonRN
+        data={radioData}
+        style={{flexDirection:'row' ,height:60,marginLeft:10 }}
+        boxStyle={{width:100 ,  height:20 }}
+        textStyle={{color:'#444' }}
+        selectedBtn={(e) => {  setFilteredStatus(e.label)  }}
+        box={false}
+        initial={1}
+        circleSize ={10}
+    />
+    </ScrollView>
+
     <ScrollView 
           horizontal={true}
           refreshControl={
@@ -80,22 +133,23 @@ const onRefresh = React.useCallback(() => {
                   refreshing={refreshing}
                   onRefresh={onRefresh}
                 />
-                }>
-
+      }>
+      
+      
     
-    {Data.length==0 ? <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}><Text>No oders yet.</Text></View> : <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}></View>}
+    {filteredData.length==0 ? <View  style={{flex:1 , justifyContent:'center' , alignItems:'center', height:SCREEN_HEIGHT , marginLeft:SCREEN_WIDTH/2-30}}><Text>No oders yet.</Text></View> : <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}></View>}
         <View >       
          <FlatList
-            style={{ width:SCREEN_WIDTH }}
-            data = {Data}
-             keyExtractor = {(item) => item.id}
+            style={{ width:SCREEN_WIDTH ,height:SCREEN_HEIGHT}}
+            data = {filteredData}
+            keyExtractor = {(item) => item.id}
             showVerticalScrollIndicator = {true}
             
              renderItem = {({ item , index}) => (
                 <View key={item.id}>
               
                    <View >
-                   <View style={styles.OrderData}>
+                  <View style={styles.OrderData}>
                   <View style={{ marginTop:10 , marginLeft:10}}>
                  <Text style ={styles.titleText}>Restaurant Name : </Text>
                  <Text style={styles.titleDesc}>{RestaurantData[index]?.restaurantName} </Text>
@@ -162,7 +216,8 @@ const styles = StyleSheet.create({
 
 container:{
     flex:1,
-},OrderData:{
+},
+OrderData:{
   width:'100%', 
   marginTop:10 ,
   marginBottom:10,
@@ -171,14 +226,17 @@ container:{
   borderBottomWidth:0.2
 },
 
-  centeredView:{
+centeredView:{
    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-  },titleText:{
+  },
+  titleText:{
     fontSize:12,
     color:'#888',
-  },titleDesc:{
+  },
+  
+titleDesc:{
 fontSize:14,
 color:'#777',
 fontWeight:'bold',

@@ -11,13 +11,9 @@ import {colors, parameters} from '../global/styles';
 
 export default function FoodCard({
     OnPressFoodCard,
-    restaurantName,
-    deliveryAvailable,
-    discountAvailable ,
-    discountPercent ,
+    restaurantName,  
     numberOfReview ,
     businessAddress ,
-    farAway ,
     averageReview ,
     images,
     screenWidth
@@ -47,13 +43,9 @@ export default function FoodCard({
                             marginTop:3
                         }}
                     />
-                    <Text style ={styles.Min}> {farAway} Min</Text>
+                    <Text style ={styles.address}>{businessAddress}</Text>
                     </View>
-
-                    <View style ={{flex:9, flexDirection:"row"}}>
-                        <Text style ={styles.address}>{businessAddress}</Text>
-                    </View>
-
+ 
                 </View>
             </View>
 
@@ -101,13 +93,7 @@ const styles = StyleSheet.create({
             paddingHorizontal:5,
             borderRightWidth:1
          },
-         Min:{
-            fontSize:12,
-            fontWeight:'bold',
-            paddingTop:5,
-            color:colors.grey3 
-         },
-
+      
          address:{
             fontSize:12,
             paddingTop:5,

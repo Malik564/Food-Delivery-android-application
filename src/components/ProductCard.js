@@ -3,12 +3,13 @@ import { StyleSheet, Text, View,Image } from 'react-native'
 
 import  {colors} from '../global/styles'
 
-const ProductCard = ({productName,price,image}) => {
+const ProductCard = ({productName, productCategory ,price,image}) => {
     return (
         <View style = {styles.view1}>
             <View style ={styles.view2}>
                 <View style ={styles.view3}>
                     <Text style ={styles.text1}>{productName}</Text>
+                    <Text style ={styles.text1}>{productCategory}</Text>
                     <Text style ={styles.text1}>Rs. {price}</Text>
                 </View>
                 <View style ={styles.view4}>

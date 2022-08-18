@@ -40,8 +40,6 @@ const [Street , setStreet] = useState('');
 
 const {register} = useContext(SignInContext);
 
-
-
 let Cities =data;
 
 Cities = Cities.filter((item) => item.country == 'PK').map((item) => (item.name));

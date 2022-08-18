@@ -4,7 +4,7 @@ import * as Animatable from 'react-native-animatable';
 import {useNavigation} from '@react-navigation/native';
 import {colors} from '../global/styles';
 import {Icon} from '@rneui/themed';
-import {filterData} from '../global/Data';
+import {filterData2} from '../global/Data';
 import filter from 'lodash/filter';
 
 
@@ -12,7 +12,7 @@ export default function SearchComponent() {
 
         const navigation  = useNavigation();
 
-        const [data, setData] =  useState([...filterData])
+        const [data, setData] =  useState([...filterData2])
         const [modalVisible, setModalVisible] = useState(false)
         const [textInputFossued,setTextInputFossued] = useState(true)
         const textInput = useRef(0)

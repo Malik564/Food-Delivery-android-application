@@ -6,9 +6,10 @@ import {colors , parameters } from  '../global/styles';
 import FoodCard from '../components/FoodCard';
 import firestore from '@react-native-firebase/firestore'
 import SelectDropdown from 'react-native-select-dropdown'
+import { useIsFocused } from "@react-navigation/native";
 
-import  {city}  from '../firebase/UserData';
-import {data} from '../global/Data';
+import  {city , user}  from '../firebase/UserData';
+import {data}  from '../global/Data';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -27,22 +28,23 @@ export default function HomeScreen({navigation}){
     const [refreshing, setRefreshing] = useState(false);
     const [City , setCity] = useState([city]);
     const dropdownRef = useRef({});
+    const isFocused = useIsFocused();
 
     let Cities =data;
-
     Cities = Cities.filter((item) => item.country == 'PK').map((item) => (item.name));
     
     let filteredData = Data.filter(item=>item.businessAddress==City);
 
 
-const FirebaseData = ()=>{
+const FetchData = ()=>{
     Data.length=0;   // to clear old array of data
     const getResTaurantData=async() => {
      await firestore().collection('restaurant').get()
     .then(function(documentSnapshot){
       documentSnapshot.forEach((doc) => {
                 Data.push(doc.data());
-            });   
+            });
+        user();
         setLoading(false)
     });
     }   
@@ -59,16 +61,17 @@ const onRefresh = React.useCallback(() => {
    
     setRefreshing(true);
     setLoading(true);
-    FirebaseData();
+    FetchData();
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
 
 
 useEffect(() => {
-    FirebaseData();
-
-}, []);
+    if(isFocused){ 
+            FetchData();
+        }
+}, [isFocused]);
 
 
 const handle=(item)=>{
@@ -177,10 +180,10 @@ const handle=(item)=>{
                     showHorizontalScrollIndicator = {false}
                     renderItem = {({item , index}) =>(
                             <FoodCard
+                                
                                 screenWidth = {SCREEN_WIDTH*0.8}
                                 images = {item.images}
                                 restaurantName = {item.restaurantName}
-                                farAway = '{item.farAway}'
                                 businessAddress = {item.businessAddress}
                                 averageReview = {item.averageReview}
                                 numberOfReview = {item.averageReview}
@@ -205,7 +208,6 @@ const handle=(item)=>{
                                 screenWidth = {SCREEN_WIDTH*0.95}
                                 images = {item.images}
                                 restaurantName = {item.restaurantName}
-                                farAway = '{item.farAway}'
                                 businessAddress = {item.businessAddress}
                                 averageReview = {item.averageReview}
                                 numberOfReview = {item.averageReview}

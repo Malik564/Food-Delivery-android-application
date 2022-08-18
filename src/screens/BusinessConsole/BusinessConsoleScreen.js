@@ -117,7 +117,7 @@ useEffect(() => {
                     refreshing={refreshing}
                     onRefresh={onRefresh}
                   /> }
-                  nestedScrollEnabled={true}
+                    nestedScrollEnabled={true}
                      >
                     </ScrollView>
                 <RestaurantHomeScreenContent navigation={navigation}
@@ -126,10 +126,9 @@ useEffect(() => {
                  RestaurantImage={Rimage} 
                  Menu={restaurantMenu} 
                  city={City} 
-                  contact={Contact} 
-                   coordinates={coordinates}  />
-              
-                 
+                 contact={Contact} 
+                  coordinates={coordinates}  />
+ 
                 </View>
           )}}}
     

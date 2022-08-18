@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, Platform } from 'react-native';
-import MapView, { Marker, AnimatedRegion } from 'react-native-maps';
+import MapView, { Marker, AnimatedRegion,PROVIDER_GOOGLE ,Callout } from 'react-native-maps';
 import imagePath from '../constants/imagePath';
 import MapViewDirections from 'react-native-maps-directions';
 import Loader from '../components/Loader';
@@ -9,6 +9,7 @@ import AddressPickup from '../components/AddressPickup';
 import { GOOGLE_MAP_KEY } from '../constants/googleMapKey';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import CalloutCard from '../components/CalloutCard';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -42,34 +43,31 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
 
     const { curLoc, time, distance, destinationCords, isLoading, coordinate,heading , city , marker} = state
     const updateState = (data) => setState((state) => ({ ...state, ...data }));
+ 
 
 
     useEffect(() => {
-        getLiveLocation();
         
-        mapRef.current.animateToRegion({
-            latitude: curLoc.lat,
-            longitude:curLoc.lng,
+        getLiveLocation();
+         mapRef.current.animateToRegion({
+            latitude: curLoc.latitude,
+            longitude: curLoc.longitude,
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
-        })
+        })     
         
-    }, [navigation])
+    }, [])
 
     const getLiveLocation = async () => {
         const locPermissionDenied = await locationPermission()
         if (locPermissionDenied) {
             const { latitude, longitude, heading } = await getCurrentLocation()
             console.log("get live location after 4 second",heading)
-
-            firestore().collection("users")
-            .doc(auth().currentUser.uid).update({ location:{latitude:latitude , longitude: longitude} });
-             
                 
             animate(latitude, longitude);
             updateState({
                 heading: heading,
-                curLoc: { latitude, longitude },
+                curLoc: { latitude: latitude, longitude : longitude },
                 coordinate: new AnimatedRegion({
                     latitude: latitude,
                     longitude: longitude,
@@ -83,17 +81,13 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
 
 
 
-     const fetchDestinationCords = (lat, lng, zipCode, cityText) => {
-        console.log("zip code==>>>",zipCode)
-        console.log('city texts',cityText)
+     const fetchDestinationCords = (lat, lng) => { 
         
-        setState({
-            ...state,
+        updateState({
             destinationCords: {
                 latitude: lat,
                 longitude: lng
-            },
-            city:cityText
+            }
         })
 
         mapRef.current.animateToRegion({
@@ -156,37 +150,7 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
         })
     }
 
-
-    const MapViewDirectionsFunc = (Object)=>{
-          {Object.keys(destinationCords).length > 0 && (<MapViewDirections
-                        origin={curLoc}
-                        destination={destinationCords}
-                        apikey={GOOGLE_MAP_KEY}
-                        strokeWidth={6}
-                        strokeColor="red"
-                        optimizeWaypoints={true}
-                        onStart={(params) => {
-                            console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
-                        }}
-                        onReady={result => {
-                            console.log(`Distance: ${result.distance} km`)
-                            console.log(`Duration: ${result.duration} min.`)
-                            fetchTime(result.distance, result.duration),
-                                mapRef.current.fitToCoordinates(result.coordinates, {
-                                    edgePadding: {
-                                        // right: 30,
-                                        // bottom: 300,
-                                        // left: 30,
-                                        // top: 100,
-                                    },
-                                });
-                        }}
-                        onError={(errorMessage) => {
-                            // console.log('GOT AN ERROR');
-                        }}
-                    />)}
-    }
-
+ 
 
 
 
@@ -202,6 +166,7 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
             </View>)}
             <View style={{ flex: 1 }}>
                 <MapView
+                    provider = {PROVIDER_GOOGLE}
                     ref={mapRef}
                     style={StyleSheet.absoluteFill}
                     initialRegion={{
@@ -213,19 +178,69 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
 
                     
                   <Marker
+                    ref = {markerRef}
                     coordinate={curLoc}
                     image={imagePath.icCurLoc}
+                    title = 'Me'
                   />
 
                     {RestaurantsData &&
-                        RestaurantsData.map(item =>(
-                            <Marker 
-                            key = {item.id}
-                                coordinate= {item.coordinates}
+                        RestaurantsData.map((item ,index ) =>(
+                            <Marker  
+                                coordinate= {item.coordinates }
                                 image = {imagePath.icGreenMarker}
-                            />
+                                title = {item.restaurantName}
+                                description = {item.businessAddress + ' ' + item.city}
+                                 
+                                onCalloutPress = { ()=>{  navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
+                            
+                            >
+                            <Callout
+                              key={index}
+                              tooltip={true}
+                              style={{ backgroundColor: "#ffffff" }}
+                            >
+                                        <CalloutCard 
+                                        Name = {item.restaurantName}
+                                        Address={item.businessAddress}
+                                        City={item.city}
+                                        image={item.images}
+                                        onPressDirection = {()=>{fetchDestinationCords(item.coordinates.latitude , item.coordinates.longitude)}}   />
+                                </Callout>
+                            </Marker>
                         ))
                     }
+
+
+                  {Object.keys(destinationCords).length > 0 && (<MapViewDirections
+                        origin={curLoc}
+                        destination={destinationCords}
+                        apikey={GOOGLE_MAP_KEY}
+                        strokeWidth={6}
+                        strokeColor="red"
+                        optimizeWaypoints={true}
+                        onStart={(params) => {
+                            console.log(`Started routing between "${params.origin}" and "${params.destination}"`);
+                        }}
+                        onReady={result => {
+                            console.log(`Distance: ${result.distance} km`)
+                            console.log(`Duration: ${result.duration} min.`)
+                            
+                            fetchTime(result.distance, result.duration),
+                                mapRef.current.fitToCoordinates(result.coordinates, {
+                                    edgePadding: {
+                                        // right: 30,
+                                        // bottom: 300,
+                                        // left: 30,
+                                        // top: 100,
+                                    },
+                                });
+                        }}
+                        onError={(errorMessage) => {
+                            // console.log('GOT AN ERROR');
+                        }}
+                    />)}   
+
 
                     {Object.keys(destinationCords).length > 0 && (<Marker
                         coordinate={destinationCords}

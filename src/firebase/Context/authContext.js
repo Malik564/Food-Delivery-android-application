@@ -89,10 +89,7 @@ return(
             });
           
           } catch (error) {
-             Alert.alert(
-            error.name,
-            error.message
-            )
+             console.log(error)
           }
         },
         logout: async () => {

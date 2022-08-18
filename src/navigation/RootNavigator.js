@@ -10,11 +10,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function RootNavigator(){
 
 
-   const load=true;
+    const load=true;
     const [loading , setLoading] =useState(load);
-
-
-const {signedIn , dispatchSignedIn} = useContext(SignInContext)
+    const {signedIn , dispatchSignedIn} = useContext(SignInContext)
  
 
 useEffect(()=>{
@@ -27,8 +25,7 @@ useEffect(()=>{
            console.log(error);
         } 
      dispatchSignedIn({type:"UPDATE_SIGN_IN", userToken:userToken})
-     
-      
+    
      setLoading(false);
 
  }, 2000);

@@ -157,7 +157,7 @@ useEffect(() => {
                     <Text style ={{fontSize:12, fontWeight:"bold" , margin:5, marginTop:20,marginLeft:20 }}>
                     order Status :<Text style={ item.orderStatus =="Delivered" && {backgroundColor:  '#29F780' }}> {item.orderStatus}</Text> 
                     </Text>
-{item.payment=='Pending' &&
+          {item.payment=='Pending' &&
                     
                      <View style = {{flexDirection:'row-reverse' , bottom:0 , right:0 , marginRight:6 }}>
                      <Button title ="Update"

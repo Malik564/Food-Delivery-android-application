@@ -11,22 +11,27 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 export default function SearchResultScreen({navigation,route}) {
 
     const {item} = route.params;
-    const [city , setCity] = useState(item);
+    const [search , setSearch] = useState(item);
+    const [city , setCity] = useState(city);
     const [data , setData] = useState([]);
     const load=true;
     const [loading , setLoading] =useState(load);
     
-
+    let Fdata =  data;
+    
+    Fdata = Fdata.filter((item1 ) => {return item1.productData.length !=0  && item1.productData.filter((item2)=>item2.category==item).length != 0 });
+ 
 const FirebaseData = ()=>{
     data.length=0;   // to clear old array of data
     const getResTaurantData=async() => {
-     await firestore().collection('restaurant').where('businessAddress', '=='  , city).get()
+     await firestore().collection('restaurant').get()
     .then(function(documentSnapshot){
-      documentSnapshot.forEach((doc) => {
-                data.push(doc.data());
+        
+      documentSnapshot.forEach((doc,i) => { 
+             data.push(doc.data());
             });   
             setLoading(false)
-    setData([...data])
+            setData([...data])
 
     });
     }
@@ -56,7 +61,7 @@ useEffect(() => {
             <View>
                 <FlatList 
                      style ={{backgroundColor:colors.cardbackground}}
-                    data = {data}
+                    data = {Fdata}
                     keyExtractor ={(item,index)=>index.toString()}
                     renderItem ={({item,index})=> (
                         <SearchResultCard
@@ -65,15 +70,15 @@ useEffect(() => {
                             averageReview ={item.averageReview}
                             numberOfReview ={item.numberOfReview}
                             restaurantName ={item.restaurantName}
-                            farAway ={item.farAway}
                             businessAddress ={item.businessAddress}
                             productData ={item.productData}
+                            searchedCategory = {search}
                             OnPressRestaurantCard ={()=>{navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
                         />
                           )}
                      ListHeaderComponent ={
                         <View>
-                            <Text style ={styles.listHeader}>{data.length} Result for {route.params.item}</Text>
+                            <Text style ={styles.listHeader}>{Fdata.length} Result for {route.params.item}</Text>
                         </View>
                      }  
                      showsVerticalScrollIndicator ={false}

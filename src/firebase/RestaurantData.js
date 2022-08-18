@@ -4,7 +4,7 @@ import firestore from '@react-native-firebase/firestore';
 
 
 
-export const  addRestaurant=async(restaurantName, Address , city , contact, Rimage, Menu , coordinates)=>{
+export const  addRestaurant=async(restaurantName, Address , city , contact, Rimage, Menu , marker)=>{
     firestore().collection('users').doc(auth().currentUser.uid).update({
       restaurant:true
     })
@@ -19,7 +19,7 @@ export const  addRestaurant=async(restaurantName, Address , city , contact, Rima
                   images:Rimage,
                   averageReview:5.0,
                   numberOfReview:0,
-                  coordinates: coordinates ,
+                  coordinates: marker ,
                
                   productData:Menu,
               }
@@ -37,7 +37,7 @@ export const  addRestaurant=async(restaurantName, Address , city , contact, Rima
 
 
 
-export const  updateRestaurant=async(restaurantName,Address , city , contact,Rimage,Menu , coordinates)=>{
+export const  updateRestaurant=async(restaurantName,Address , city , contact,Rimage, Menu , coordinates)=>{
   
     firestore().collection('restaurant').doc(auth().currentUser.uid)
               .update({

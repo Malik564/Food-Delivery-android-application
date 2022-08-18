@@ -40,8 +40,9 @@ export default function EditRestaurantScreen({navigation  , route}){
   
     const [progress , setProgress] = useState();
     const [itemProgress , setItemProgress] =useState([]);
-    const categories = ["🍔 Fast Food", "🍜 Chinese","🥘 Arabian", "🥩 Grill", "🥧 Desert" , "🥗 Salads", "🐟 Sea Food", "🍾 Bar" ]
-      
+    const categories = ["🍔 Fast Food", "🍜 Chinese","🥘 Arabian", "🥩 Grill", "🥧 Desert" , "🥗 Salads", "🐟 Sea Food", "🍾 Bar" , "🍛 Continental"]
+                           
+   
 let Cities =data;
 
 Cities = Cities.filter((item) => item.country == 'PK').map((item) => (item.name));
@@ -401,7 +402,7 @@ const animate = (latitude, longitude) => {
                     buttonStyle = {styles.addRestaurantButton}
                     titleStyle = {parameters.buttonTitle}
                     onPress={()=>{
-                       updateRestaurant(restaurantName , address , City , Rcontact, Rimage, Menu , marker);
+                       updateRestaurant(restaurantName , address , City , Rcontact, Rimage, menu , marker);
                        navigation.goBack();} }
              /></View>
         </View>

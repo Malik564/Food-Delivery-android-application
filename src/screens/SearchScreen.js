@@ -33,7 +33,7 @@ export default function SearchScreen({navigation}){
                                 >
                                     
                                 <View style ={styles.textView}>
-                                    <Text style ={{color:colors.cardbackground}}>{item.name}</Text>
+                                    <Text style ={{color:'#fefe'}}>{item.name}</Text>
                                 </View>
                                 </ImageBackground>  
                             </View>

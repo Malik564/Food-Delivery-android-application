@@ -13,6 +13,8 @@ export default function SignInScreen({navigation}){
 
     const[loading , setLoading] = useState(false);
     const[textInput2Fossued, setTextInput2Fossued] =useState(false)
+    const[visibile, setVisible] =useState(false)
+
     const textInpput1 = useRef(1)
     const textInput2 = useRef(2)
 
@@ -70,15 +72,16 @@ export default function SignInScreen({navigation}){
                           setTextInput2Fossued(true)
                       }}
                       onChangeText={(userPassword) => setPassword(userPassword)}
-                      secureTextEntry={true}
+                      secureTextEntry={!visibile}
                     />
 
                     <Animatable.View animation ={textInput2Fossued?"":"fadeInLeft"} duration={400} >
                         <Icon 
-                                name ="visibility-off"
+                                name ={  visibile ? "visibility-off":"visibility"}
                                 iconStyle ={{color:colors.grey3}}
                                 type ="material"
-                                style={{marginRight:10}} 
+                                style={{marginRight:10}}
+                                onPress={()=>{visibile? setVisible(false) : setVisible(true)}} 
                             />
 
                 </Animatable.View>
@@ -97,8 +100,12 @@ export default function SignInScreen({navigation}){
                         }
                         else
                         {
+                         
                             setMsg('');
-                            setLoading(true);login(email, password);}
+                            setLoading(true);
+                            login(email, password);
+                            
+                            }
                          }}
                    />
             </View>  
