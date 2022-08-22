@@ -20,7 +20,6 @@ export default function HomeHeader({navigation}){
                 onPress ={()=>{
                     navigation.toggleDrawer()
                 }}
-
             />
         </View>
 

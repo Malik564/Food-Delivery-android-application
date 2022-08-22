@@ -179,6 +179,7 @@ const handle=(item)=>{
                     keyExtractor = {(item , index) => index.toString()}
                     showHorizontalScrollIndicator = {false}
                     renderItem = {({item , index}) =>(
+                        <View key={index}>
                             <FoodCard
                                 
                                 screenWidth = {SCREEN_WIDTH*0.8}
@@ -188,7 +189,7 @@ const handle=(item)=>{
                                 averageReview = {item.averageReview}
                                 numberOfReview = {item.averageReview}
                                 OnPressFoodCard={()=>{ navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
-                            />
+                            /></View>
                     )}
                 />
             </View>
@@ -203,6 +204,7 @@ const handle=(item)=>{
             <View style = {{width:SCREEN_WIDTH , paddingTop:10 }}>
                 {
                     Data.map(item => (
+                         <View key={item.id}>
                         <View  style = {{paddingBottom:20}}>
                              <FoodCard
                                 screenWidth = {SCREEN_WIDTH*0.95}
@@ -213,6 +215,7 @@ const handle=(item)=>{
                                 numberOfReview = {item.averageReview}
                                 OnPressFoodCard={()=>{ navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
                             />
+                        </View>
                         </View>
                     ))
                 }

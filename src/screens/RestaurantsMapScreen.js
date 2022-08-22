@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image ,Pressable, Modal, Platform } from 'react-native';
 import MapView, { Marker, AnimatedRegion,PROVIDER_GOOGLE ,Callout } from 'react-native-maps';
 import imagePath from '../constants/imagePath';
 import MapViewDirections from 'react-native-maps-directions';
@@ -17,10 +17,12 @@ const LATITUDE_DELTA = 0.04;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const RestaurantsMapScreen = ({ navigation , route }) => {
+
+    const [modalVisible, setModalVisible] = useState(false);
     const {RestaurantsData} = route.params;
-    
     const mapRef = useRef();
     const markerRef = useRef();
+    const [ModalItem , setModalItem] = useState();
     const [state, setState] = useState({
         curLoc: {
             latitude: 31.5204,
@@ -78,11 +80,11 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
         }
     }
 
-
-
-
      const fetchDestinationCords = (lat, lng) => { 
-        
+        updateState({
+            destinationCords: {
+            }
+        })
         updateState({
             destinationCords: {
                 latitude: lat,
@@ -107,9 +109,6 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
     }, [])
 
 
- 
-
-    
     const fetchValue = (data) => {
         console.log("this is data", data)
         updateState({
@@ -141,8 +140,6 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
     }
 
 
-
-
     const fetchTime = (d, t) => {
         updateState({
             distance: d,
@@ -151,10 +148,6 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
     }
 
  
-
-
-
-
 
 
     return (
@@ -176,7 +169,6 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
                     }}
                 >
 
-                    
                   <Marker
                     ref = {markerRef}
                     coordinate={curLoc}
@@ -191,22 +183,21 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
                                 image = {imagePath.icGreenMarker}
                                 title = {item.restaurantName}
                                 description = {item.businessAddress + ' ' + item.city}
-                                 
-                                onCalloutPress = { ()=>{  navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
-                            
+                                onCalloutPress ={() =>  {setModalItem(item) ; setModalVisible(!modalVisible)}}
                             >
                             <Callout
                               key={index}
                               tooltip={true}
                               style={{ backgroundColor: "#ffffff" }}
                             >
-                                        <CalloutCard 
-                                        Name = {item.restaurantName}
-                                        Address={item.businessAddress}
-                                        City={item.city}
-                                        image={item.images}
-                                        onPressDirection = {()=>{fetchDestinationCords(item.coordinates.latitude , item.coordinates.longitude)}}   />
-                                </Callout>
+                                <CalloutCard 
+                                Name = {item.restaurantName}
+                                Address={item.businessAddress}
+                                City={item.city}
+                                image={item.images}
+                                />
+                                
+                            </Callout>
                             </Marker>
                         ))
                     }
@@ -263,13 +254,56 @@ const RestaurantsMapScreen = ({ navigation , route }) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.bottomCard}>
-                <Text>Where are you finding restaurant ..?</Text>
+                <Text>Search the location for restaurant ..?</Text>
                  <AddressPickup
                     placheholderText="Enter a Location"
                     fetchAddress={fetchDestinationCords}
                 />
             </View>
             <Loader isLoading={isLoading} />
+
+
+
+
+
+
+             <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Select</Text>
+            <View style={{flexDirection:'row'}}> 
+            
+            <Pressable
+              style={[styles.button,styles.otherButtons]}
+              onPress={() =>{navigation.navigate('MenuScreen',{ name:ModalItem.restaurantName,Data:ModalItem.productData ,restaurant:ModalItem.restaurantOwner, image : ModalItem.images , Address :ModalItem.businessAddress }), setModalVisible(!modalVisible)}}
+            >
+              <Text style={styles.textStyle}>Restaurant</Text>
+            </Pressable>
+            <TouchableOpacity 
+                    style={{marginLeft:-20 ,marginBottom:20 }}
+                     onPress = {()=>{fetchDestinationCords(ModalItem.coordinates.latitude , ModalItem.coordinates.longitude) ; setModalVisible(!modalVisible)}}  
+                >
+                   <Text > <Image source={imagePath.greenIndicator} /></Text>
+            </TouchableOpacity>
+            </View>
+
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
         </View>
     );
 };
@@ -295,7 +329,56 @@ const styles = StyleSheet.create({
         height: 48,
         justifyContent: 'center',
         marginTop: 16
-    }
+    },
+     centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  otherButtons:{
+    backgroundColor: "#F08607",
+    margin:5 ,
+    height:40,
+    marginTop:35},
+
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+    width:100,
+    margin:2
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  }
 });
 
 export default RestaurantsMapScreen;

@@ -8,7 +8,7 @@ import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import RestaurantHomeScreenContent from '../../components/RestaurantHomeScreenContent';
 
-import {restaurant} from '../../firebase/UserData'
+import {restaurant , user} from '../../firebase/UserData'
 
     
 const wait = (timeout) => {
@@ -32,8 +32,8 @@ export default function BusinessConsoleScreen({navigation}){
 
     const [refreshing, setRefreshing] = useState(false);
 
-const FirebaseData =()=>{
-    const getResTaurantData=async() => { await firestore().collection('restaurant').doc(auth().currentUser.uid).get()
+ 
+const getResTaurantData=async() => { await firestore().collection('restaurant').doc(auth().currentUser.uid).get()
     .then(function(doc){
       documentSnapshot = doc.data();
       setRestarantName(documentSnapshot.restaurantName);
@@ -46,27 +46,35 @@ const FirebaseData =()=>{
       setLoading(false)
     });
     }
+
+
+ 
+
+
+const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+
     if(restaurant)
     getResTaurantData()
     else setLoading(false)
 
-}
 
-
-
-const onRefresh = React.useCallback(() => {
-  setRefreshing(true);
-   FirebaseData()
     wait(2000).then(() => setRefreshing(false));
   }, []);
-
+ user();
 
 useEffect(() => {
   navigation.addListener('focus', () => {
-      FirebaseData()
+    setLoading(true);
+    user();
+    if(restaurant)
+    getResTaurantData()
+    else setLoading(false)
+
+
     });
    
-}, [restaurant,navigation]);
+}, [navigation]);
 
 
 
@@ -79,9 +87,35 @@ useEffect(() => {
          )
         }
     else{
-          if(!restaurant){
+          if(restaurant){
           return(
-            <View >
+                <View style={styles.container}>
+                  <ScrollView
+                  horizontal={true}
+                  refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                  /> }
+                    nestedScrollEnabled={true}
+                     >
+                    </ScrollView>
+                <RestaurantHomeScreenContent navigation={navigation}
+                 name={restaurantName} 
+                 Address={restaurantAddress} 
+                 RestaurantImage={Rimage} 
+                 Menu={restaurantMenu} 
+                 city={City} 
+                 contact={Contact} 
+                 coordinates={coordinates}  />
+ 
+                </View>
+
+         )}
+        else{
+          return(
+ 
+       <View >
           <Header title ="BUSINESS CONSOLE"  type ="arrow-left" navigation ={navigation}/>
           <ScrollView
             stickyHeaderIndices= {[0]}
@@ -106,30 +140,6 @@ useEffect(() => {
             
              </ScrollView>
           </View>
-         )}
-        else{
-          return(
-                <View style={styles.container}>
-                  <ScrollView
-                  horizontal={true}
-                  refreshControl={
-                  <RefreshControl
-                    refreshing={refreshing}
-                    onRefresh={onRefresh}
-                  /> }
-                    nestedScrollEnabled={true}
-                     >
-                    </ScrollView>
-                <RestaurantHomeScreenContent navigation={navigation}
-                 name={restaurantName} 
-                 Address={restaurantAddress} 
-                 RestaurantImage={Rimage} 
-                 Menu={restaurantMenu} 
-                 city={City} 
-                 contact={Contact} 
-                  coordinates={coordinates}  />
- 
-                </View>
           )}}}
     
         

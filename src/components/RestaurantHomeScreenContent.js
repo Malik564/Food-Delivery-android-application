@@ -3,6 +3,8 @@ import {View , Text ,Pressable ,StyleSheet ,Dimensions,TouchableOpacity ,ScrollV
 import {Icon} from '@rneui/themed'
 import {colors} from '../global/styles'
 
+import {restaurant , user} from '../firebase/UserData'
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT= Dimensions.get('window').height;
 
@@ -12,7 +14,7 @@ const SCREEN_HEIGHT= Dimensions.get('window').height;
 
 export default function RestaurantHomeScreenContent({navigation , name , Address ,RestaurantImage ,city , contact , coordinates ,Menu}) {
 
-  
+  if( restaurant){
   return ( <ImageBackground
   source={{uri : RestaurantImage}}
   style={{width: '100%', }}
@@ -89,7 +91,7 @@ export default function RestaurantHomeScreenContent({navigation , name , Address
     </View>
     </View>
     </ImageBackground>
-  )
+  )}else{return ( <View></View>)}
 }
 
 styles = StyleSheet.create({

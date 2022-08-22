@@ -424,7 +424,7 @@ useEffect(()=>{
                         } 
                         else {
                         addRestaurant(restaurantName , Address,City , Rcontact  , Rimage , menu , marker);
-                                    navigation.dispatch(StackActions.popToTop());} }}
+                                    navigation.dispatch(StackActions.popToTop());   navigation.navigate('HomeScreen') } }}
              /></View>
         </View>
     )

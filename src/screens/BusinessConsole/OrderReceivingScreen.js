@@ -4,6 +4,7 @@ import {Icon, Badge} from '@rneui/themed'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import { Button } from '@rneui/base'; 
+import RadioButtonRN from 'radio-buttons-react-native';
  
 
 import SelectDropdown from 'react-native-select-dropdown'
@@ -22,6 +23,40 @@ export default function OrderReceivingScreen({navigation}) {
     const OrderStatus = ["Pending", "Cooking","On the Way", "Delivered", "Canceled" ]
     const paymentStatus = ["Pending", "Done" ]
     
+    const [filteredStatus , setFilteredStatus] = useState('All');
+     let filteredData ;
+
+   
+    if (filteredStatus == 'All'){
+       filteredData = OrderData ;
+    }else{
+      filteredData =  OrderData.filter(item => item.orderStatus == filteredStatus)
+    } 
+
+const radioData = [
+{
+  label: 'All'
+ },
+ {
+  label: 'Pending'
+ },
+ {
+  label: 'Cooking'
+ },
+ {
+  label: 'On the Way'
+ },
+ {
+  label: 'Delivered'
+ },
+ {
+  label: 'Canceled'
+ }, 
+
+]; 
+
+
+
 const getOrdersData=async() => {
         await firestore().collection('restaurant').doc(auth().currentUser.uid)
             .collection("orders").orderBy("createdAt", "desc").get()
@@ -102,11 +137,27 @@ useEffect(() => {
     else{ 
         return (
     <View style={styles.container}>
-    {OrderData.length==0 ? <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}><Text>No oders yet.</Text></View> : <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}></View>}
-        <View >       
+    
+    <ScrollView 
+      horizontal={true}
+      >
+    <RadioButtonRN
+        data={radioData}
+        style={{flexDirection:'row' ,height:60,marginLeft:10 }}
+        boxStyle={{width:100 ,  height:20 }}
+        textStyle={{color:'#444' }}
+        selectedBtn={(e) => {  setFilteredStatus(e.label)  }}
+        box={false}
+        initial={1}
+        circleSize ={10}
+    />
+    </ScrollView>
+
+    {filteredData.length==0 ? <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}><Text>No oders yet.</Text></View> : <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}></View>}
+        <View style={{ }} >       
          <FlatList
-            style={{ width:SCREEN_WIDTH }}
-            data = {OrderData}
+            style={{ width:SCREEN_WIDTH ,height : SCREEN_HEIGHT-120  }}
+            data = {filteredData}
              keyExtractor = {(item) => item.id}
              renderItem = {({ item , index}) => (
                 <View key={item.id}>
@@ -123,7 +174,7 @@ useEffect(() => {
                   <Text style={styles.titleDesc}>{CustomerData[index]?.contact}</Text>
 
                   <Text style ={styles.titleText}>Address : </Text>
-                  <Text style = {styles.titleDesc}>{CustomerData[index]?.location}</Text>
+                  <Text style = {styles.titleDesc}>{CustomerData[index]?.street}</Text>
                   
                   <Text style={styles.titleText}>Date of Order : </Text>
                   <Text style ={styles.titleDesc}>  {item.createdAt}</Text>

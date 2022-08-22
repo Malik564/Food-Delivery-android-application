@@ -3,7 +3,7 @@ import { StyleSheet, Text, View,Image , TouchableOpacity} from 'react-native'
 import imagePath from '../constants/imagePath';
 import  {colors} from '../global/styles'
 
-const CalloutCard = ({Name, Address ,City,image , onPressDirection}) => {
+const CalloutCard = ({Name, Address ,City,image }) => {
     
     return (
         <View style = {styles.view1}>
@@ -18,12 +18,7 @@ const CalloutCard = ({Name, Address ,City,image , onPressDirection}) => {
                     <Text style ={styles.text2}>{City}</Text>
  
                 </View>
-               <TouchableOpacity 
-               style={{marginLeft:-20}}
-                    onPress={onPressDirection}
-                >
-                   <Text > <Image source={imagePath.greenIndicator} /></Text>
-                </TouchableOpacity>
+               
                 
             </View>
         </View>

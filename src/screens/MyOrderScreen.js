@@ -52,9 +52,7 @@ const radioData = [
   label: 'Canceled'
  }, 
 
-];
-
-const [StatusState , setStatusState] = useState(radioData[0].label);
+]; 
 
 
 
@@ -138,9 +136,9 @@ const onRefresh = React.useCallback(() => {
       
     
     {filteredData.length==0 ? <View  style={{flex:1 , justifyContent:'center' , alignItems:'center', height:SCREEN_HEIGHT , marginLeft:SCREEN_WIDTH/2-30}}><Text>No oders yet.</Text></View> : <View  style={{flex:1 , justifyContent:'center' , alignItems:'center'}}></View>}
-        <View >       
+        <View style={{}}  >       
          <FlatList
-            style={{ width:SCREEN_WIDTH ,height:SCREEN_HEIGHT}}
+            style={{ width:SCREEN_WIDTH ,height : SCREEN_HEIGHT }}
             data = {filteredData}
             keyExtractor = {(item) => item.id}
             showVerticalScrollIndicator = {true}
@@ -194,7 +192,7 @@ const onRefresh = React.useCallback(() => {
 
                     <View style = {{flexDirection:'row-reverse' , bottom:0 , right:0 , marginRight:6 }}>
                     <Text style ={styles.titleText, { margin:4, marginRight:30}}>
-                    Order Status : <Text style={styles.titleDesc}>{item.orderStatus}</Text>
+                    Order Status : <Text style={styles.titleDesc  , item.orderStatus =="Delivered" && {backgroundColor:  '#29F780' }}  >{item.orderStatus}</Text>
                     </Text>
                   </View> 
                   </View>
