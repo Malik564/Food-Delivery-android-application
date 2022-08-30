@@ -483,12 +483,14 @@ const styles =StyleSheet.create({
     width : 70 , 
     borderRadius:50 , 
     margin :10,
-    },shadowProp: {
+    },
+    shadowProp: {
     shadowColor: '#171717',
     shadowOffset: {width: -2, height: 4},
     shadowOpacity: 0.2,
     shadowRadius: 3,
-  },card:{backgroundColor: 'white',
+  },
+  card:{backgroundColor: 'white',
     borderRadius: 15,
     paddingHorizontal: 5,
     elevation:5,

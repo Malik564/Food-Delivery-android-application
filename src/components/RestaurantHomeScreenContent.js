@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import {View , Text ,Pressable ,StyleSheet ,Dimensions,TouchableOpacity ,ScrollView ,Image ,ImageBackground, FlatList} from 'react-native';
 import {Icon} from '@rneui/themed'
 import {colors} from '../global/styles'
@@ -13,6 +13,9 @@ const SCREEN_HEIGHT= Dimensions.get('window').height;
 
 
 export default function RestaurantHomeScreenContent({navigation , name , Address ,RestaurantImage ,city , contact , coordinates ,Menu}) {
+
+
+
 
   if( restaurant){
   return ( <ImageBackground
@@ -89,8 +92,13 @@ export default function RestaurantHomeScreenContent({navigation , name , Address
             />
       </View>
     </View>
+
+    
+       
     </View>
     </ImageBackground>
+
+
   )}else{return ( <View></View>)}
 }
 

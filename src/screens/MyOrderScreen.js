@@ -1,9 +1,13 @@
 import React ,{useState,useEffect}from 'react'
-import {View , Text ,Pressable ,StyleSheet ,Dimensions ,RefreshControl ,ScrollView,ActivityIndicator,Image , FlatList} from 'react-native'
+import {View , Text ,Pressable ,StyleSheet ,Dimensions ,RefreshControl,TextInput,TouchableOpacity ,ScrollView,ActivityIndicator,Image , FlatList} from 'react-native'
 import {Icon, Badge} from '@rneui/themed'
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import RadioButtonRN from 'radio-buttons-react-native';
+import StarRating from 'react-native-star-rating';
+
+import{ reviewUpdate  ,UpdateAverageReview }from '../firebase/order'
+
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT= Dimensions.get('window').height;
@@ -22,15 +26,21 @@ export default function MyOrderScreen({navigation}) {
     const [RestaurantData , setRestaurantData] =useState([]);
     const [refreshing, setRefreshing] = useState(false); 
     const [filteredStatus , setFilteredStatus] = useState('All');
-
     let filteredData ;
+    const [Reviews , setReviews] =useState([])
 
-   
+
     if (filteredStatus == 'All'){
        filteredData = Data ;
+       Reviews.length = 0;
+       Reviews.push(filteredData.map(item=>(item.review)))
+   
     }else{
       filteredData =  Data.filter(item => item.orderStatus == filteredStatus)
+      Reviews.length=0;
+      Reviews.push(filteredData.map(item=>(item.review))) 
     } 
+
 
 const radioData = [
 {
@@ -53,7 +63,6 @@ const radioData = [
  }, 
 
 ]; 
-
 
 
 const getOrdersData=async() => {
@@ -111,7 +120,7 @@ const onRefresh = React.useCallback(() => {
     
     <ScrollView 
       horizontal={true}
-      >
+    >
     <RadioButtonRN
         data={radioData}
         style={{flexDirection:'row' ,height:60,marginLeft:10 }}
@@ -125,12 +134,12 @@ const onRefresh = React.useCallback(() => {
     </ScrollView>
 
     <ScrollView 
-          horizontal={true}
-          refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={onRefresh}
-                />
+      horizontal={true}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
       }>
       
       
@@ -147,10 +156,13 @@ const onRefresh = React.useCallback(() => {
                 <View key={item.id}>
               
                    <View >
+                   <View  style={{marginLeft:SCREEN_WIDTH-170  , position:'absolute'}}>
+                     <Image style= {{height:150, width:150 }} source = {require('../assets/chef.png') } ></Image>   
+                  </View>
                   <View style={styles.OrderData}>
                   <View style={{ marginTop:10 , marginLeft:10}}>
                  <Text style ={styles.titleText}>Restaurant Name : </Text>
-                 <Text style={styles.titleDesc}>{RestaurantData[index]?.restaurantName} </Text>
+                 <Text style={styles.titleDesc,{fontSize:16 , fontWeight:'bold'}}>{RestaurantData[index]?.restaurantName} </Text>
 
                   <Text style ={styles.titleText}>Restaurant Contact : </Text>
                   <Text style={styles.titleDesc}>{RestaurantData[index]?.restaurantContact }</Text>
@@ -159,11 +171,12 @@ const onRefresh = React.useCallback(() => {
                   <Text style = {styles.titleDesc}>{RestaurantData[index]?.businessAddress}</Text>
                   
                   <Text style={styles.titleText}>Date of Order : </Text>
-                  <Text style ={styles.titleDesc}> {item.createdAt}</Text>
+                  <Text style ={styles.titleDesc}>{item.createdAt}</Text>
                   </View>
 
+                  
 
-                <View style={{ borderWidth:0.3 , width:'90%' , marginHorizontal:20 , borderRadius:8 ,marginTop:5, backgroundColor:'#fff'}}  >
+                <View style={{ borderWidth:0.3 , width:'90%' , marginHorizontal:20 , borderRadius:8 ,marginTop:10, backgroundColor:'#fff'}}  >
                   <View style={{ borderBottomWidth:0.3 , width:'90%' , marginHorizontal:20}} >
                     <Text style ={{fontSize:12,color:'#444', fontWeight:"bold" , marginTop:5 , marginLeft:30}}>
                      name</Text>
@@ -175,7 +188,7 @@ const onRefresh = React.useCallback(() => {
 
                     {item.order.map((item , index) => <View  key = {item.id}>
                     <View style={{backgroundColor:index%2==0 ?'	#D3D3D3' : '#fff' , borderBottomWidth:0.1} }>  
-                     <Text style ={{fontSize:12,color:'#555', fontWeight:"bold" , marginTop:5 , marginLeft:30}}>
+                     <Text style ={{fontSize:14,color:'#555', fontWeight:"bold" , marginTop:5 , marginLeft:30}}>
                      {item.name}</Text>
                      <Text style ={{ position:'absolute',fontSize:12,color:'#555' , marginTop:5 , marginLeft:150}}>
                      x{item.quantity}</Text>
@@ -185,16 +198,69 @@ const onRefresh = React.useCallback(() => {
                    </View> )}
 
                    </View>    
-                   <Text style ={{fontSize:12,color:'#555', fontWeight:"bold" , marginTop:5 , marginLeft:50}}>
-                     Total                                                            Rs. {item.totalPrice}</Text>
+                   <View >
+                    <Text style ={{fontSize:14,color:'#555', fontWeight:"bold" , marginTop:5 , marginLeft:50}}>
+                     Total</Text>
+                    <Text style ={{ position:'absolute', fontSize:16,color:'#555', fontWeight:"bold" , marginTop:5 , marginLeft:SCREEN_WIDTH-143}}>
+                      Rs. {item.totalPrice}</Text>
+                     
+                   </View>
+                   
                      </View>
 
 
-                    <View style = {{flexDirection:'row-reverse' , bottom:0 , right:0 , marginRight:6 }}>
+                    <View style = {{ marginLeft:10 , marginTop:5 }}>
                     <Text style ={styles.titleText, { margin:4, marginRight:30}}>
-                    Order Status : <Text style={styles.titleDesc  , item.orderStatus =="Delivered" && {backgroundColor:  '#29F780' }}  >{item.orderStatus}</Text>
+                    Order Status : <Text style={styles.titleDesc  , item.orderStatus =="Delivered" && {color:  '#29F780' ,fontSize:16 , fontWeight:'bold' } }  >{item.orderStatus}</Text>
                     </Text>
                   </View> 
+                    <View style = {{ marginLeft:10 , marginTop: 5 }}>
+                    <Text style ={styles.titleText, { margin:4, marginRight:30}}>
+                    Payment : <Text style={styles.titleDesc  , item.payment !="Pending" && {color:  '#29F780' ,fontSize:16 , fontWeight:'bold' } }  >{item.payment}</Text>
+                    </Text>
+                  </View> 
+                
+                  { item.orderStatus == "Delivered" &&  
+                  
+                  <View>
+                    <View style = {{ width:SCREEN_WIDTH , alignItems:'center' , marginVertical:5}}><Text style = {{ fontSize:20, color:'#FF0000'}}>Review</Text></View>
+                    <StarRating
+                      fullStarColor ='#FFFF00'
+                      containerStyle={{marginHorizontal:30}}
+                      starSize = {30} 
+                      maxStars={5}
+                      rating={Reviews[0][index] >0 ? Reviews[0][index]  : 0}
+                      selectedStar={(rating) =>{  Reviews[0][index]= rating ; item.review = rating; setReviews( [...Reviews ]); }}
+                    />
+
+                    
+                  {item.feedback && 
+                  <View style = {{margin:10}}><Text style = {styles.titleDesc}>Feedback : </Text>
+                  <Text style = {styles.titleText}>{ item.feedback }</Text></View>
+                   }
+
+
+                  <View style = {{flexDirection:'row' , marginHorizontal:10}} >
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={(t)=>{item.feedback = t}}
+                    
+                    placeholder ="Feedback"
+                  />
+                    <TouchableOpacity  style ={{marginTop:10 }}
+                    onPress={()=>{reviewUpdate(item.restaurantId , item.invoice ,item.review , item.feedback); UpdateAverageReview(item.restaurantId) }}
+                    >
+                     <Icon 
+                        size={24}
+                        name ="send"
+                        type ="material"
+                    />
+                    <Text>Submit</Text>
+                  </TouchableOpacity>
+                  </View>
+                  </View>
+                  }
+                  
                   </View>
                   </View>
           
@@ -205,6 +271,8 @@ const onRefresh = React.useCallback(() => {
       
     
         </View></ScrollView>
+
+
     </View>
 )
 }}
@@ -239,5 +307,13 @@ fontSize:14,
 color:'#777',
 fontWeight:'bold',
 marginBottom:3
-  }
+  },
+  
+  input: {
+    height: 40,
+    margin: 12,
+    width:SCREEN_WIDTH-80,
+    borderWidth: 1,
+    padding: 10,
+  },
 })

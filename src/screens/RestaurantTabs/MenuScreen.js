@@ -1,27 +1,35 @@
-import React,{ useEffect ,useState} from 'react';
-import {View , Text ,Pressable ,StyleSheet ,Dimensions ,ScrollView ,Image ,ImageBackground , FlatList , ActivityIndicator } from 'react-native';
+import React,{ useEffect ,useState ,useRef} from 'react';
+import {View , Text ,Pressable, TouchableOpacity ,StyleSheet ,Dimensions ,ScrollView ,Image ,ImageBackground , FlatList , ActivityIndicator } from 'react-native';
 import {Icon, Badge} from '@rneui/themed'
-
+import firestore from '@react-native-firebase/firestore'
 import { StackActions } from '@react-navigation/native';
+import ReviewComponent from '../../components/ReviewComponent'
 
-
+import BottomSheet from 'react-native-simple-bottom-sheet';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT= Dimensions.get('window').height;
 
 
 export default function MenuScreen({navigation ,route}) {
  
-    const{ name , Data ,restaurant, image , Address }= route.params;
+    const{ name , Data ,restaurant, image , Address , restaurantId }= route.params;
     const [order,setOrder] = useState(Data);
     const load=true;
     const [loading , setLoading] =useState(load);
-
+    const panelRef = useRef(null);
+    
+    const Reviewload=true;
+    const [Reviewloading , setReviewLoading] =useState(Reviewload);
+    
     useEffect(() => {
+      
       order.forEach(order => {
         if(!order.quantity)
           order.quantity=0
       });
       setLoading(false)
+
+      FetchReviewsData();
     }, [])
 
     const [cartCounter, setCartCounter]  = useState(0);
@@ -36,28 +44,44 @@ export default function MenuScreen({navigation ,route}) {
     const onPressRemoveIconHandler=(index)=>{
       if(order[index].quantity > 0)
         order[index].quantity -=1
-
         setOrder([...order])
         setCartCounter(cartCounter-1)
           }
 
+const [ReviewsData , setReviewsData] = useState([])
+
+const FetchReviewsData = ()=>{
+    ReviewsData.length=0;   // to clear old array of data
+    const getReviewData=async() => {
+     await firestore().collection('restaurant').doc(restaurantId).collection('orders').where('orderStatus','==','Delivered').get()
+    .then(function(documentSnapshot){
+      documentSnapshot.forEach((doc) => {
+            ReviewsData.push(doc.data());
+          });
+
+          setReviewLoading(false)
+    });
+    }   
+    getReviewData();
+}
+
+
 
     
-     if(loading)
-        {
-            return(
-            <View style={{flex:1,alignItems:'center' , justifyContent:'center'}}>
-             <ActivityIndicator size="large" size={80} color = '#DA5004'/>
-            </View>
-            )
-        }
-        else{
-
+    if(loading)
+       {
+           return(
+           <View style={{flex:1,alignItems:'center' , justifyContent:'center'}}>
+            <ActivityIndicator size="large" size={80} color = '#DA5004'/>
+           </View>
+           )
+       }
+       else{
     return (
         <ImageBackground
-  source={{uri : image}}
-  style={{width: '100%', height: 250 ,}}
-> 
+    source={{uri : image}}
+    style={{width: '100%', height: 250 ,}}
+    > 
     <View style={{ backgroundColor:'rgba(30, 30, 30,0.4)'}}>
 
       <View style={{top :5 , position:'absolute', marginLeft:5}}> 
@@ -83,24 +107,25 @@ export default function MenuScreen({navigation ,route}) {
           onPress ={()=>{navigation.navigate('CartScreen' , {order:order ,restaurant:restaurant})}}
       />
       <Badge
-    value={cartCounter}
-    containerStyle={{ position: 'absolute', top: -4, right: -4 }}
-    />
+      value={cartCounter}
+      containerStyle={{ position: 'absolute', top: -4, right: -4 }}
+      />
       </View>
 
       <View>
         <Text style ={{fontSize:20 , marginTop:40,marginLeft:10 , color:'#ddd'}}>Restaurant name</Text> 
         <Text style ={{fontSize:24, fontWeight:"bold" , marginTop:10,marginLeft:10, color:'#eee' }}>{name}</Text>
         <Text style ={{fontSize:20,  marginTop:20,marginLeft:10, color:'#ddd'}}>Restaurant Address</Text> 
-        <Text style ={{fontSize:24, fontWeight:"bold" , marginTop:10,marginLeft:10 , marginBottom:10, color:'#eee'}}>{Address}</Text> 
-     
+        <Text style ={{fontSize:24, fontWeight:"bold" , marginTop:10,marginLeft:10 , marginBottom:10, color:'#eee'}}>{Address}</Text>
       </View>
  
        <View style={styles.menuContainer}>
         <View>
-            <Text style ={{fontSize:20, fontWeight:"bold" , marginTop:12,marginLeft:20, marginBottom:10,color:'#999' , borderBottomWidth:0.19 , width:350, borderColor:'#888'}}>Menu</Text> 
+            <Text style ={styles.MenuHeading}>Menu</Text> 
+        <TouchableOpacity onPress={() => panelRef.current.togglePanel()}>
+        <Text  style ={styles.Reviews}>Reviews</Text>
+      </TouchableOpacity>
        </View>
-
       
 
         <View>
@@ -147,26 +172,46 @@ export default function MenuScreen({navigation ,route}) {
                   </View> 
                   </View>
                    
-
                   </View>
                   </View>
                  </Pressable>
             )}
         />
         </View>
-
        </View>
-            
+      
+      <BottomSheet isOpen={false} ref={ref => panelRef.current = ref}  sliderMaxHeight={SCREEN_HEIGHT*0.7} >
 
+      {Reviewloading ?  <View style = {{height:SCREEN_HEIGHT * 0.7 , alignItems:'center' , justifyContent:'center'}}>
+            <ActivityIndicator size="large" size={80} color = '#DA5004'/>
+           </View>
+      :
 
-    </View></ImageBackground>
+      ReviewsData.length == 0 ? 
+      <View style = {{height:SCREEN_HEIGHT * 0.7 , alignItems:'center' , justifyContent:'center'}}>
+        <Text>No Reviews Yet</Text>
+      </View>
+      :
+      <View style = {{height:SCREEN_HEIGHT * 0.7 }}>
+          
+         <ReviewComponent 
+          ReviewsData = {ReviewsData} />
+      </View>
+      
+      }
+      
+      </BottomSheet>
+    
+    </View>
+    </ImageBackground>
+    
   )
 }
 }
 const styles = StyleSheet.create({
  menuContainer:{
     backgroundColor:'#fff',
-    height:SCREEN_HEIGHT-100,
+    height:SCREEN_HEIGHT-190,
     width:SCREEN_WIDTH,
     borderTopRightRadius:30,
     borderTopLeftRadius:30
@@ -183,5 +228,25 @@ productData:{
   width:(SCREEN_WIDTH/2)-30 , 
   height:250 , 
   marginTop:20 ,
+ },
+ MenuHeading:{
+  fontSize:20, 
+  fontWeight:"bold" , 
+  marginTop:12,
+  marginLeft:20, 
+  marginBottom:10,
+  color:'#999' , 
+  borderBottomWidth:0.19 , 
+  width:350, 
+  borderColor:'#888'
+ },
+ Reviews:{
+  fontSize:20, 
+  fontWeight:"bold" ,
+  color:'#999',
+  position:'absolute',
+  marginTop:-40,
+  right:0,
+  marginRight:30
  }
 })

@@ -69,8 +69,12 @@ const onRefresh = React.useCallback(() => {
 
 useEffect(() => {
     if(isFocused){ 
+        
             FetchData();
         }
+
+
+
 }, [isFocused]);
 
 
@@ -106,60 +110,58 @@ const handle=(item)=>{
                 />
                 }
         >
-            <View style = {styles.filterView}>
-                        <View style = {styles.addressView}>
-                        
-                            <View style = {{  flexDirection:'row'  , alignItems:'center', paddingLeft:10}}>
-                                <Text style = {{marginLeft : 5}}>Location</Text>
-                                <Icon 
-                                    type = 'material-community'
-                                    name = 'map-marker'
-                                    color = {colors.grey1}
-                                    size = {26}
-                                    onPress={()=>{  City.length=0;
-                                                    City[0]=city;
-                                                    setCity([...City]);}}
-                                />
-                                <Text style = {{marginLeft : 5}}>{City[0]} </Text>
-                            
-                            </View>
-                            <Pressable  onPress={()=>{dropdownRef.current.openDropdown()}}>
-                            <View style = {styles.clockView}>
-                                <Icon 
-                                    type = 'material-community'
-                                    name = 'tune'
-                                    color = {colors.grey1}
-                                    size = {26}
-                                />
-
-                                <Text style = {{marginLeft : 5}}> Filter  </Text>
-                            </View></Pressable>
-                        </View>
-                        <View>
-                             
-                                <SelectDropdown
-	                              data={Cities}
-                                  buttonStyle={{height:0 , width:'100%'}}
-                                  defaultButtonText={City[0]}
-                                  ref={dropdownRef} 
-	                              onSelect={(selectedItem )=> {
-                                        const Item = selectedItem;
-                                       
-	                                	handle(Item);
-	                                }}
-	                                buttonTextAfterSelection={(selectedItem, index) => {
-	                                	// text represented after item is selected
-	                                	// if data array is an array of objects then return selectedItem.property to render after item is selected
-	                                	return selectedItem
-	                                }}
-	                                rowTextForSelection={(item, index) => {
-	                                	// text represented for each item in dropdown
-	                                	// if data array is an array of objects then return item.property to represent item in dropdown
-	                                	return item
-	                                }}
-                                />
-                        </View>
+         <View style = {styles.filterView}>
+            <View style = {styles.addressView}>
+            
+                <View style = {{  flexDirection:'row'  , alignItems:'center', paddingLeft:10}}>
+                    <Text style = {{marginLeft : 5}}>Location</Text>
+                    <Icon 
+                        type = 'material-community'
+                        name = 'map-marker'
+                        color = {colors.grey1}
+                        size = {26}
+                        onPress={()=>{  City.length=0;
+                                        City[0]=city;
+                                        setCity([...City]);}}
+                    />
+                    <Text style = {{marginLeft : 5}}>{City[0]} </Text>
+                
+                </View>
+                <Pressable  onPress={()=>{dropdownRef.current.openDropdown()}}>
+                <View style = {styles.clockView}>
+                    <Icon 
+                        type = 'material-community'
+                        name = 'tune'
+                        color = {colors.grey1}
+                        size = {26}
+                    />
+                    <Text style = {{marginLeft : 5}}> Filter  </Text>
+                </View></Pressable>
             </View>
+            <View>
+             <SelectDropdown
+	           data={Cities}
+               buttonStyle={{height:0 , width:'100%'}}
+               defaultButtonText={City[0]}
+               ref={dropdownRef} 
+	           onSelect={(selectedItem )=> {
+                     const Item = selectedItem;
+                    
+	             	handle(Item);
+	             }}
+	             buttonTextAfterSelection={(selectedItem, index) => {
+	             	// text represented after item is selected
+	             	// if data array is an array of objects then return selectedItem.property to render after item is selected
+	             	return selectedItem
+	             }}
+	             rowTextForSelection={(item, index) => {
+	             	// text represented for each item in dropdown
+	             	// if data array is an array of objects then return item.property to represent item in dropdown
+	             	return item
+	             }}
+             />
+            </View>
+        </View>
 
            
  
@@ -180,16 +182,15 @@ const handle=(item)=>{
                     showHorizontalScrollIndicator = {false}
                     renderItem = {({item , index}) =>(
                         <View key={index}>
-                            <FoodCard
-                                
-                                screenWidth = {SCREEN_WIDTH*0.8}
-                                images = {item.images}
-                                restaurantName = {item.restaurantName}
-                                businessAddress = {item.businessAddress}
-                                averageReview = {item.averageReview}
-                                numberOfReview = {item.averageReview}
-                                OnPressFoodCard={()=>{ navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
-                            /></View>
+                        <FoodCard
+                            screenWidth = {SCREEN_WIDTH*0.8}
+                            images = {item.images}
+                            restaurantName = {item.restaurantName}
+                            businessAddress = {item.businessAddress}
+                            averageReview = {item.averageReview}
+                            numberOfReview = {item.numberOfReview}
+                            OnPressFoodCard={()=>{ navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
+                        /></View>
                     )}
                 />
             </View>
@@ -212,8 +213,8 @@ const handle=(item)=>{
                                 restaurantName = {item.restaurantName}
                                 businessAddress = {item.businessAddress}
                                 averageReview = {item.averageReview}
-                                numberOfReview = {item.averageReview}
-                                OnPressFoodCard={()=>{ navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress })}}
+                                numberOfReview = {item.numberOfReview}
+                                OnPressFoodCard={()=>{  navigation.navigate('MenuScreen',{ name:item.restaurantName,Data:item.productData ,restaurant:item.restaurantOwner, image : item.images , Address :item.businessAddress , restaurantId:item.restaurantOwner })}}
                             />
                         </View>
                         </View>

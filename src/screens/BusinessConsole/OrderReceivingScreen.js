@@ -6,7 +6,6 @@ import firestore from '@react-native-firebase/firestore';
 import { Button } from '@rneui/base'; 
 import RadioButtonRN from 'radio-buttons-react-native';
  
-
 import SelectDropdown from 'react-native-select-dropdown'
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -268,8 +267,6 @@ useEffect(() => {
                   </View> 
 }
 
-
-
                   </View>
                   </View>
                  </Pressable>
@@ -277,9 +274,6 @@ useEffect(() => {
      </View>
      )}
         />
-
-      
-    
         </View>
     </View>
 )
