@@ -89,10 +89,22 @@ export default function CartScreen({navigation,route}) {
         />
     
         <View >
-        <View style={{flexDirection:'row'}}>
-          <Text style={{marginLeft:10,fontSize:18}}>Total Price</Text>
-          <Text style={{marginLeft:200 , fontSize:18}} >Rs. {totalPrice}</Text>
+        <View style={{flexDirection:'row', borderBottomWidth:0.1 , marginBottom:10 , marginHorizontal:10}}>
+          <Text style={{marginLeft:10,fontSize:18 , marginRight:10}}>Cash On Delivery</Text> 
+          <Icon
+                      type = "material-community"
+                      color = '#555'
+                      name = 'cart'
+                      size ={26}
+                    /> 
+        
         </View>
+
+        <View style={{flexDirection:'row' ,marginLeft:10}}>
+          <Text style={{marginLeft:10,fontSize:18}}>Total Price</Text>
+          <Text style={{   marginLeft:SCREEN_WIDTH-190 , fontSize:18  }} >Rs. {totalPrice}</Text>
+        </View>
+
         <Button   
           title ="Proceed"
           disabled={orderData.length==0? true : false}

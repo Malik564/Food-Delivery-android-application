@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native'
 import { AuthStack } from './authStack';
 import { AppStack } from './appStack'; 
 import { SignInContext } from '../firebase/Context/authContext';
-
+import auth from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RootNavigator(){
@@ -13,19 +13,22 @@ export default function RootNavigator(){
     const load=true;
     const [loading , setLoading] =useState(load);
     const {signedIn , dispatchSignedIn} = useContext(SignInContext)
- 
 
 useEffect(()=>{
  setTimeout(async() => {
     let userToken;
     userToken=null;
+    if(auth().currentUser==null){
+        dispatchSignedIn({type:"UPDATE_SIGN_IN", userToken:userToken})
+        await AsyncStorage.removeItem('userToken');
+    }
      try {
           userToken = await AsyncStorage.getItem('userToken');
-        } catch (error) {
+        }
+        catch (error) {
            console.log(error);
         } 
      dispatchSignedIn({type:"UPDATE_SIGN_IN", userToken:userToken})
-    
      setLoading(false);
 
  }, 2000);
@@ -45,7 +48,6 @@ useEffect(()=>{
             )
         }
         else{
-
             return(
             <NavigationContainer>
                 { signedIn.userToken === null   ?  <AuthStack />: <AppStack />}

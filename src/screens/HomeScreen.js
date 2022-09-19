@@ -1,5 +1,5 @@
 import React ,{ useState ,useEffect,useRef} from 'react';
-import {View , Text , StyleSheet , TouchableOpacity , ScrollView ,RefreshControl, FlatList , Pressable , Image , Dimensions , ActivityIndicator} from 'react-native';
+import {View , Text , StyleSheet , Alert , TouchableOpacity , ScrollView ,RefreshControl, FlatList , Pressable , Image , Dimensions , ActivityIndicator} from 'react-native';
 import {Icon} from '@rneui/base';
 import HomeHeader from '../components/HomeHeader';
 import {colors , parameters } from  '../global/styles';
@@ -7,7 +7,7 @@ import FoodCard from '../components/FoodCard';
 import firestore from '@react-native-firebase/firestore'
 import SelectDropdown from 'react-native-select-dropdown'
 import { useIsFocused } from "@react-navigation/native";
-
+import auth from '@react-native-firebase/auth';
 import  {city , user}  from '../firebase/UserData';
 import {data}  from '../global/Data';
 
@@ -55,8 +55,6 @@ const FetchData = ()=>{
 
 
 
-
-
 const onRefresh = React.useCallback(() => {
    
     setRefreshing(true);
@@ -69,11 +67,8 @@ const onRefresh = React.useCallback(() => {
 
 useEffect(() => {
     if(isFocused){ 
-        
-            FetchData();
+        FetchData();
         }
-
-
 
 }, [isFocused]);
 
@@ -98,8 +93,18 @@ const handle=(item)=>{
 
     return(
         <View style = {styles.container}>
-            <HomeHeader title = 'Go Food' types = 'menu' navigation ={navigation}/>
             
+            <HomeHeader title = 'Go Food' types = 'menu' navigation ={navigation}/>
+        { !auth().currentUser.emailVerified && 
+        <Pressable
+        style= {{width:SCREEN_WIDTH  , backgroundColor:'#ffff' , height:45 , flexDirection:'row'}} 
+        onPress={()=>{ auth().currentUser.sendEmailVerification(); Alert.alert('An Verifaction Link has been sent to Your Email!');}} >
+            <Text style={{color:'#CC3A38' , marginLeft:10,marginRight:130 , marginTop:10 , fontWeight:'bold'}}>Verify Your Email Now!</Text>
+            <Text style = {{borderWidth:1 , width:85 , height:30, paddingLeft:7 ,padding:5 , color:'#CC3A38' ,fontWeight:'bold', borderColor:'#CC3A38', marginTop:8 }} >Verify Now</Text>
+            
+        </Pressable>
+        }
+        
         <ScrollView
             stickyHeaderIndices= {[0]}
             showVerticalScrollIndicator = {true}
@@ -139,6 +144,7 @@ const handle=(item)=>{
                 </View></Pressable>
             </View>
             <View>
+            
              <SelectDropdown
 	           data={Cities}
                buttonStyle={{height:0 , width:'100%'}}
@@ -205,7 +211,7 @@ const handle=(item)=>{
             <View style = {{width:SCREEN_WIDTH , paddingTop:10 }}>
                 {
                     Data.map(item => (
-                         <View key={item.id}>
+                        <View key={item.id}>
                         <View  style = {{paddingBottom:20}}>
                              <FoodCard
                                 screenWidth = {SCREEN_WIDTH*0.95}

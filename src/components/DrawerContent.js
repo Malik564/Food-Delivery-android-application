@@ -6,7 +6,7 @@ import {colors} from '../global/styles'
 import {SignInContext} from '../firebase/Context/authContext'
 import {UserEmail , name ,restaurant , image} from '../firebase/UserData';
 
-export default function DrawerContent(props){
+export default function DrawerContent(props  ,{navigation} ){
         const {logout} = useContext(SignInContext);
 
 
@@ -14,7 +14,8 @@ export default function DrawerContent(props){
          return(
              <View style ={styles.container}>
                  <DrawerContentScrollView {...props}>
-                 <View style ={{backgroundColor:colors.buttons,}}>
+
+             <View style ={{backgroundColor:colors.buttons,}}>
                 <View style = {{flexDirection:'row', alignItems:'center',  paddingLeft:20,paddingVertical:10}}>
                     <Avatar 
                         rounded
@@ -49,35 +50,10 @@ export default function DrawerContent(props){
             </View>
 
 
-                
                 <DrawerItemList {...props} />
 
              
-                <DrawerItem 
-                    label = "Promotions"
-                    icon = {({color,size})=>(
-                        <Icon 
-                            type ="material-community"
-                            name = "tag-heart"
-                            color ={color}
-                            size ={size}
-                        />
-                    )}
-                />
-
-
-
-            <DrawerItem 
-                    label = "Settings"
-                    icon = {({color,size})=>(
-                        <Icon 
-                            type ="material-community"
-                            name = "cog-outline"
-                            color ={color}
-                            size ={size}
-                        />
-                    )}
-                />
+            
 
 
 
@@ -96,7 +72,7 @@ export default function DrawerContent(props){
 
 
 
-
+{/* 
        <View style ={{borderTopWidth:1, borderTopColor:colors.grey5}}>
             <Text style ={styles.preferences}>Preferences</Text>
 
@@ -110,7 +86,7 @@ export default function DrawerContent(props){
                 </View>
             </View>
 
-       </View>         
+       </View>          */}
 
 
 

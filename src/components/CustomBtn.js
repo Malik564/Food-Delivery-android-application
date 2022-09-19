@@ -8,6 +8,7 @@ const CustomBtn = ({
     btnStyle = {},
     btnText
 }) => {
+    
     return (
      <TouchableOpacity
      onPress={onPress}

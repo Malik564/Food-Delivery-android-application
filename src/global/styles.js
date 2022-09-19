@@ -12,7 +12,8 @@ export const colors= {
     headerText : '#ffffff',
     background2: '#DA5004',
     lightgreen: '#376F1B',
-    pagebackground : '#e1e8ec'
+    pagebackground : '#e1e8ec',
+    verify:'#CC3A38'
 }
 
 

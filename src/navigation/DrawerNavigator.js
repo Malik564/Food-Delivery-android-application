@@ -6,14 +6,17 @@ import {colors} from '../global/styles';
 import RestaurantStack from './restaurantStack';
 import DrawerContent from '../components/DrawerContent'
 import MyAccountScreen from '../screens/Account/MyAccountScreen'
+import settingsScreen from '../screens/settings/settingsScreen';
+
+
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator(){
 
     return(
-        <Drawer.Navigator
-                drawerContent  = {props =><DrawerContent {...props} /> }
-            >
+        <Drawer.Navigator drawerContent  = {props =><DrawerContent {...props} /> } >
+        
+     
             <Drawer.Screen 
                 name = "RootClientTabs"
                 component ={RootClientTabs}
@@ -27,7 +30,6 @@ export default function DrawerNavigator(){
                             name = "home"
                             color = {focussed ? '#7cc' :colors.grey2}
                             size = {size}
-
                         />
                     )
                 }}
@@ -67,6 +69,28 @@ export default function DrawerNavigator(){
                     )
                 }}
             />
+
+
+
+            <Drawer.Screen 
+                name = "Settings"
+                component ={settingsScreen}
+                options = {{
+                    headerShown: false, 
+                    drawerIcon: ({focussed,size}) =>(
+                        <Icon 
+                            type = "material-community"
+                            name = "cog-outline"
+                            color = {focussed ? '#7cc' :colors.grey2}
+                            size = {size}
+
+                        />
+                    )
+                }}
+            />
+           
+           
+
 
         </Drawer.Navigator>
     )

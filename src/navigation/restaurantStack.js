@@ -5,6 +5,8 @@ import BusinessConsoleScreen from './../screens/BusinessConsole/BusinessConsoleS
 import EditRestaurantScreen from '../screens/BusinessConsole/EditRestaurantScreen';
 import OrderReceivingScreen from '../screens/BusinessConsole/OrderReceivingScreen';
 
+
+
 const restaurantStackNavigator = createNativeStackNavigator();
 
 export default function RestaurantStack(){
@@ -47,6 +49,9 @@ return(
      title:'Orders'
  }}
 /> 
+
+
+ 
 
 
 </restaurantStackNavigator.Navigator>

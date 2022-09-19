@@ -11,6 +11,7 @@ let restaurant;
 let image ; 
 let city;
 let UserEmail;
+let street;
 
 export const user=async() =>  firestore().collection("users")
             .doc(auth().currentUser.uid)
@@ -24,9 +25,10 @@ export const user=async() =>  firestore().collection("users")
                 image = documentSnapshot.userImg;
                 city = documentSnapshot.city;
                 UserEmail = documentSnapshot.email;
+                street = documentSnapshot.street;
             })
 
 user();
 
-export { name , contact , location , createdAt , restaurant , image , city , UserEmail} 
+export { name , contact , location , createdAt , restaurant , image , city,street , UserEmail} 
  
